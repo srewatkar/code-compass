@@ -24,7 +24,7 @@ MAX_RETRIES = 3   # not enforced, just a signal`,
       {
         id: 'data-types',
         title: 'Data types overview',
-        note: 'Both languages have strings, numbers, booleans, null/None, arrays/lists, and objects/dicts. Key difference: JS has undefined and null; Python only has None.',
+        note: "Both languages have strings, numbers, booleans, null/None, arrays/lists, and objects/dicts. Key differences: JS has undefined and null; Python only has None. JS object keys don't need quotes; Python dict keys that are strings always need quotes.",
         js: `let str = 'hello'        // string
 let num = 42             // number (int + float unified)
 let float = 3.14         // same type as int
@@ -32,14 +32,15 @@ let bool = true          // boolean
 let nothing = null       // null
 let undef = undefined    // undefined (no equivalent in Python)
 let arr = [1, 2, 3]     // array
-let obj = { a: 1 }      // object`,
-        python: `s = 'hello'           # str
-n = 42               # int
-f = 3.14             # float (separate type from int)
-b = True             # bool (capital T/F)
-nothing = None       # None (no undefined)
-lst = [1, 2, 3]     # list
-dct = {'a': 1}      # dict`,
+let obj = { a: 1 }      // object — key 'a' needs no quotes in JS`,
+        python: `s = 'hello'            # str
+n = 42                # int
+f = 3.14              # float (separate type from int)
+b = True              # bool (capital T/F)
+nothing = None        # None (no undefined)
+lst = [1, 2, 3]      # list
+dct = {'a': 1}       # dict — key 'a' MUST be quoted in Python
+                      # {a: 1} would use variable a as key, not string 'a'`,
       },
       {
         id: 'comments',
@@ -773,6 +774,34 @@ const obj = { 'first-name': 'Alice' }`,
 # Keys must be quoted strings (or any hashable):
 obj = {'first-name': 'Alice'}
 d = {1: 'one', 2: 'two'}  # integer keys ok`,
+      },
+      {
+        id: 'obj-key-quotes',
+        title: 'Object keys — quotes or no quotes?',
+        note: 'JS: bare words like `a` are automatically treated as string keys — no quotes needed. Python: bare words are VARIABLES, not strings. You must quote keys that are strings. Writing {a: 1} in Python uses the value of variable a as the key, not the string "a".',
+        js: `// JS: no quotes needed on valid identifier keys
+const obj = { a: 1, name: 'Alice' }  // keys are strings "a" and "name"
+
+// These are identical in JS:
+const x = { a: 1 }
+const y = { "a": 1 }   // same thing
+
+// Quotes REQUIRED only for special characters:
+const z = { 'first-name': 1, '123start': 2 }
+
+// So { a: 1 } means key is the STRING "a"`,
+        python: `# Python: bare words are VARIABLES, not strings
+a = 'something'
+
+d1 = {'a': 1}  # key is the string 'a'
+d2 = {a: 1}    # key is the VALUE of variable a → {'something': 1}
+                # NameError if variable a is not defined!
+
+# You must ALWAYS quote string keys:
+obj = {'name': 'Alice', 'age': 30}
+
+# Non-string keys are fine (any hashable type):
+d = {1: 'one', True: 'bool', (1,2): 'tuple'}`,
       },
       {
         id: 'obj-access',
