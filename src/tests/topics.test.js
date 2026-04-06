@@ -6,6 +6,11 @@ describe('topics data', () => {
     expect(topics.length).toBeGreaterThan(0)
   })
 
+  it('has no duplicate IDs across all categories', () => {
+    const ids = topics.flatMap(cat => cat.items.map(item => item.id))
+    expect(new Set(ids).size).toBe(ids.length)
+  })
+
   topics.forEach(cat => {
     describe(`category: ${cat.category}`, () => {
       it('has a non-empty category name', () => {

@@ -22,7 +22,7 @@ export default function Sidebar({ topics, selectedId, onSelect, searchQuery }) {
     if (q && filtered.length > 0) {
       onSelect(filtered[0].items[0].id)
     }
-  }, [q])
+  }, [q, onSelect])
 
   if (filtered.length === 0) {
     return (
