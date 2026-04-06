@@ -544,4 +544,209 @@ s[-2]   # 'l'`,
       },
     ],
   },
+  {
+    category: 'Arrays / Lists',
+    items: [
+      {
+        id: 'array-create',
+        title: 'Create an array / list',
+        note: 'Both use square bracket syntax. JS calls them arrays; Python calls them lists.',
+        js: `const arr = [1, 2, 3]
+const empty = []
+const mixed = [1, 'two', true, null]
+const nested = [[1, 2], [3, 4]]`,
+        python: `lst = [1, 2, 3]
+empty = []
+mixed = [1, 'two', True, None]
+nested = [[1, 2], [3, 4]]`,
+      },
+      {
+        id: 'array-access',
+        title: 'Access by index',
+        note: 'Both use [index] syntax starting at 0. Python supports negative indexing (-1 = last); JS does not.',
+        js: `const arr = ['a', 'b', 'c']
+arr[0]      // 'a'
+arr[2]      // 'c'
+arr[-1]     // undefined ← JS has no negative indexing
+arr[arr.length - 1]  // 'c' — last element in JS`,
+        python: `lst = ['a', 'b', 'c']
+lst[0]    # 'a'
+lst[2]    # 'c'
+lst[-1]   # 'c' ← negative indexing!
+lst[-2]   # 'b'`,
+      },
+      {
+        id: 'array-push-append',
+        title: 'push() vs append()',
+        note: "Add to the end of a list/array. JS uses push(); Python uses append().",
+        js: `const arr = [1, 2, 3]
+arr.push(4)       // [1, 2, 3, 4]
+arr.push(5, 6)    // multiple at once → [1, 2, 3, 4, 5, 6]`,
+        python: `lst = [1, 2, 3]
+lst.append(4)         # [1, 2, 3, 4]
+lst.extend([5, 6])    # multiple → [1, 2, 3, 4, 5, 6]
+# append([5,6]) would add a nested list, not extend`,
+      },
+      {
+        id: 'array-pop-shift',
+        title: 'pop / shift / unshift',
+        note: 'JS has push/pop (end) and unshift/shift (start). Python has append/pop (end) and insert/pop(0) (start).',
+        js: `const arr = [1, 2, 3]
+arr.pop()       // removes & returns 3 → arr = [1, 2]
+arr.shift()     // removes & returns 1 → arr = [2]
+arr.unshift(0)  // adds to start → arr = [0, 2]`,
+        python: `lst = [1, 2, 3]
+lst.pop()       # removes & returns 3 → lst = [1, 2]
+lst.pop(0)      # removes & returns index 0 → lst = [2]
+lst.insert(0, 0)  # adds to start → lst = [0, 2]`,
+      },
+      {
+        id: 'array-slice',
+        title: 'slice() / splice() vs list slicing',
+        note: "JS slice() is non-destructive (returns copy). splice() mutates. Python uses [start:end] slice notation.",
+        js: `const arr = [0, 1, 2, 3, 4]
+
+// slice — non-destructive:
+arr.slice(1, 3)    // [1, 2] — arr unchanged
+arr.slice(-2)      // [3, 4]
+
+// splice — mutates:
+arr.splice(1, 2)           // removes 2 at index 1 → [1, 2]
+arr.splice(1, 0, 'a', 'b') // insert at index 1`,
+        python: `lst = [0, 1, 2, 3, 4]
+
+# Slice — non-destructive:
+lst[1:3]    # [1, 2] — lst unchanged
+lst[-2:]    # [3, 4]
+lst[::2]    # [0, 2, 4] — every 2nd
+
+# Delete a range:
+del lst[1:3]  # removes elements in-place`,
+      },
+      {
+        id: 'array-indexof',
+        title: 'indexOf / find vs index()',
+        note: 'Find the position of a value. JS returns -1 if not found; Python raises ValueError.',
+        js: `const arr = ['a', 'b', 'c', 'b']
+arr.indexOf('b')         // 1 — first match
+arr.lastIndexOf('b')     // 3 — last match
+arr.indexOf('z')         // -1 — not found
+
+arr.find(x => x > 'a')  // 'b' — first match by condition
+arr.findIndex(x => x > 'a')  // 1 — index of condition match`,
+        python: `lst = ['a', 'b', 'c', 'b']
+lst.index('b')       # 1 — first match
+lst.index('z')       # ValueError ← throws if not found
+
+# Safe check first:
+'z' in lst           # False
+lst.index('b') if 'b' in lst else -1  # 1`,
+      },
+      {
+        id: 'array-includes',
+        title: 'includes() vs in operator',
+        note: 'Check if a value exists. JS uses .includes(); Python uses in.',
+        js: `[1, 2, 3].includes(2)   // true
+[1, 2, 3].includes(5)   // false`,
+        python: `2 in [1, 2, 3]    # True
+5 in [1, 2, 3]    # False
+5 not in [1, 2, 3]  # True`,
+      },
+      {
+        id: 'array-map-filter',
+        title: 'map / filter / reduce vs list comprehension',
+        note: 'JS uses method chaining. Python prefers list comprehensions but also has map()/filter().',
+        js: `const nums = [1, 2, 3, 4, 5]
+
+nums.map(x => x * 2)          // [2, 4, 6, 8, 10]
+nums.filter(x => x % 2 === 0) // [2, 4]
+nums.reduce((acc, x) => acc + x, 0) // 15
+
+// Chain them:
+nums.filter(x => x % 2 === 0).map(x => x * 2) // [4, 8]`,
+        python: `nums = [1, 2, 3, 4, 5]
+
+# List comprehensions (preferred):
+[x * 2 for x in nums]           # [2, 4, 6, 8, 10]
+[x for x in nums if x % 2 == 0] # [2, 4]
+
+# map/filter also work (returns iterators):
+list(map(lambda x: x * 2, nums))          # [2, 4, 6, 8, 10]
+list(filter(lambda x: x % 2 == 0, nums))  # [2, 4]
+
+from functools import reduce
+reduce(lambda acc, x: acc + x, nums)  # 15`,
+      },
+      {
+        id: 'array-sort',
+        title: 'sort()',
+        note: "JS sort() mutates and converts to string by default — always pass a comparator for numbers. Python sort() is stable and works correctly out of the box.",
+        js: `const arr = [3, 1, 2]
+arr.sort()              // [1, 2, 3] — mutates arr
+[10, 9, 2].sort()       // [10, 2, 9] ← string sort! bug
+[10, 9, 2].sort((a, b) => a - b)  // [2, 9, 10] — numeric
+
+const words = ['banana', 'apple', 'cherry']
+words.sort()            // ['apple', 'banana', 'cherry']
+
+// Non-mutating sort:
+[...arr].sort((a, b) => a - b)`,
+        python: `lst = [3, 1, 2]
+lst.sort()              # [1, 2, 3] — mutates
+sorted([3, 1, 2])       # returns new list, doesn't mutate
+
+[10, 9, 2].sort()       # [2, 9, 10] ← works correctly
+
+# Sort by key:
+words = ['banana', 'apple', 'cherry']
+sorted(words, key=len)  # ['apple', 'banana', 'cherry']
+sorted(words, reverse=True)  # ['cherry', 'banana', 'apple']`,
+      },
+      {
+        id: 'array-spread',
+        title: 'Spread [...arr] vs list copy',
+        note: 'Copy or merge arrays/lists. JS uses spread syntax. Python uses slice or list().',
+        js: `const a = [1, 2, 3]
+
+// Shallow copy:
+const b = [...a]
+const c = a.slice()
+
+// Merge:
+const merged = [...a, ...b]   // [1,2,3,1,2,3]
+const prepend = [0, ...a]     // [0,1,2,3]`,
+        python: `a = [1, 2, 3]
+
+# Shallow copy:
+b = a[:]          # slice copy
+c = list(a)       # list() copy
+d = a.copy()      # .copy() method
+
+# Merge:
+merged = a + b    # [1,2,3,1,2,3]
+prepend = [0] + a # [0,1,2,3]`,
+      },
+      {
+        id: 'array-length',
+        title: 'length vs len()',
+        note: 'JS uses the .length property. Python uses the len() built-in function.',
+        js: `[1, 2, 3].length   // 3
+[].length           // 0`,
+        python: `len([1, 2, 3])   # 3
+len([])          # 0`,
+      },
+      {
+        id: 'array-from',
+        title: 'Array.from() vs list()',
+        note: 'Convert iterables to arrays/lists. Both are commonly used to convert strings, sets, ranges, etc.',
+        js: `Array.from('hello')           // ['h','e','l','l','o']
+Array.from(new Set([1,1,2]))  // [1, 2] — dedup
+Array.from({length: 3}, (_, i) => i)  // [0, 1, 2]`,
+        python: `list('hello')          # ['h','e','l','l','o']
+list({1, 1, 2})        # [1, 2] — from set
+list(range(3))         # [0, 1, 2]
+list(map(str, [1,2]))  # ['1', '2']`,
+      },
+    ],
+  },
 ]
