@@ -2,14 +2,14 @@ import { useEffect, useRef } from 'react'
 import hljs from 'highlight.js/lib/core'
 import javascript from 'highlight.js/lib/languages/javascript'
 import python from 'highlight.js/lib/languages/python'
-import 'highlight.js/styles/atom-one-dark.css'
+import 'highlight.js/styles/github.css'
 import './CodeBlock.css'
 
 hljs.registerLanguage('javascript', javascript)
 hljs.registerLanguage('python', python)
 
 const LANG_CONFIG = {
-  javascript: { label: 'JavaScript', color: '#f0db4f' },
+  javascript: { label: 'JavaScript', color: '#b45309' },
   python: { label: 'Python', color: '#3572A5' },
 }
 
