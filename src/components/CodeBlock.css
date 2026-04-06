@@ -3,6 +3,8 @@
   overflow: hidden;
   border: 1px solid #e2e8f0;
   margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
 }
 
 .code-block-header {
@@ -30,6 +32,7 @@
   overflow-x: auto;
   font-size: 13.5px;
   line-height: 1.6;
+  flex: 1;
 }
 
 .code-block code {
