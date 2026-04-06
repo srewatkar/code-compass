@@ -749,4 +749,542 @@ list(map(str, [1,2]))  # ['1', '2']`,
       },
     ],
   },
+  {
+    category: 'Objects / Dicts',
+    items: [
+      {
+        id: 'obj-create',
+        title: 'Create an object / dict',
+        note: 'JS objects use {} with key: value. Python dicts use {} with "key": value (keys must be strings or hashable types).',
+        js: `const person = {
+  name: 'Alice',
+  age: 30,
+  active: true,
+}
+
+// Keys don't need quotes (unless special chars):
+const obj = { 'first-name': 'Alice' }`,
+        python: `person = {
+    'name': 'Alice',
+    'age': 30,
+    'active': True,
+}
+
+# Keys must be quoted strings (or any hashable):
+obj = {'first-name': 'Alice'}
+d = {1: 'one', 2: 'two'}  # integer keys ok`,
+      },
+      {
+        id: 'obj-access',
+        title: 'Access keys',
+        note: 'JS: dot notation or bracket notation. Python: bracket notation or .get() for safe access.',
+        js: `const obj = { name: 'Alice', age: 30 }
+
+obj.name          // 'Alice' — dot notation
+obj['name']       // 'Alice' — bracket notation
+obj.missing       // undefined — no error
+obj['missing']    // undefined — no error`,
+        python: `obj = {'name': 'Alice', 'age': 30}
+
+obj['name']         # 'Alice'
+obj.get('name')     # 'Alice'
+obj['missing']      # KeyError ← throws!
+obj.get('missing')  # None — safe
+obj.get('missing', 'default')  # 'default' — with fallback`,
+      },
+      {
+        id: 'obj-add-delete',
+        title: 'Add / delete keys',
+        note: 'Both support adding keys dynamically and deleting them.',
+        js: `const obj = { a: 1 }
+
+obj.b = 2             // add key
+obj['c'] = 3          // add key (bracket)
+
+delete obj.b          // delete key
+delete obj['c']       // delete key`,
+        python: `obj = {'a': 1}
+
+obj['b'] = 2          # add key
+obj['c'] = 3          # add key
+
+del obj['b']          # delete key
+obj.pop('c')          # delete & return value
+obj.pop('z', None)    # safe delete — no error if missing`,
+      },
+      {
+        id: 'obj-keys-values',
+        title: 'Object.keys() / .values() / .entries()',
+        note: 'JS uses static methods on Object. Python has .keys(), .values(), .items() as dict methods.',
+        js: `const obj = { a: 1, b: 2, c: 3 }
+
+Object.keys(obj)    // ['a', 'b', 'c']
+Object.values(obj)  // [1, 2, 3]
+Object.entries(obj) // [['a',1],['b',2],['c',3]]`,
+        python: `obj = {'a': 1, 'b': 2, 'c': 3}
+
+list(obj.keys())    # ['a', 'b', 'c']
+list(obj.values())  # [1, 2, 3]
+list(obj.items())   # [('a',1),('b',2),('c',3)]
+
+# Iterate directly:
+for key, val in obj.items():
+    print(key, val)`,
+      },
+      {
+        id: 'obj-check-key',
+        title: 'Check if key exists',
+        note: 'JS uses "in" operator or hasOwnProperty(). Python uses "in" on the dict directly.',
+        js: `const obj = { a: 1, b: 2 }
+
+'a' in obj                  // true
+obj.hasOwnProperty('a')     // true
+'z' in obj                  // false
+obj.a !== undefined          // true (but fragile)`,
+        python: `obj = {'a': 1, 'b': 2}
+
+'a' in obj       # True
+'z' in obj       # False
+'z' not in obj   # True`,
+      },
+      {
+        id: 'obj-merge',
+        title: 'Merge / copy objects',
+        note: 'Shallow copy and merge. JS uses spread or Object.assign(). Python uses | operator (3.9+) or .update().',
+        js: `const a = { x: 1 }
+const b = { y: 2 }
+
+// Merge:
+const merged = { ...a, ...b }    // { x:1, y:2 }
+const merged2 = Object.assign({}, a, b)
+
+// Shallow copy:
+const copy = { ...a }`,
+        python: `a = {'x': 1}
+b = {'y': 2}
+
+# Merge (Python 3.9+):
+merged = a | b       # {'x': 1, 'y': 2}
+merged = {**a, **b}  # also works (older syntax)
+
+# Shallow copy:
+copy = a.copy()
+copy2 = dict(a)
+
+# Update in-place:
+a.update(b)   # a is now {'x':1,'y':2}`,
+      },
+      {
+        id: 'obj-loop',
+        title: 'Loop over object / dict',
+        note: 'Both support iterating keys, values, and key-value pairs.',
+        js: `const obj = { a: 1, b: 2 }
+
+// Keys:
+for (const key in obj) { console.log(key) }
+Object.keys(obj).forEach(k => console.log(k))
+
+// Values:
+Object.values(obj).forEach(v => console.log(v))
+
+// Key-value pairs:
+for (const [k, v] of Object.entries(obj)) {
+  console.log(k, v)
+}`,
+        python: `obj = {'a': 1, 'b': 2}
+
+# Keys:
+for key in obj:
+    print(key)
+
+# Values:
+for val in obj.values():
+    print(val)
+
+# Key-value pairs:
+for key, val in obj.items():
+    print(key, val)`,
+      },
+    ],
+  },
+  {
+    category: 'Functions',
+    items: [
+      {
+        id: 'fn-declare',
+        title: 'Declare a function',
+        note: 'JS has function declarations and function expressions. Python uses def.',
+        js: `// Function declaration (hoisted):
+function greet(name) {
+  return \`Hello, \${name}!\`
+}
+
+// Function expression:
+const greet2 = function(name) {
+  return \`Hello, \${name}!\`
+}
+
+greet('Alice')   // 'Hello, Alice!'`,
+        python: `def greet(name):
+    return f'Hello, {name}!'
+
+greet('Alice')   # 'Hello, Alice!'`,
+      },
+      {
+        id: 'fn-arrow-lambda',
+        title: 'Arrow functions vs lambda',
+        note: 'Arrow functions are full functions. Python lambdas are limited to a single expression.',
+        js: `// Arrow function — any complexity:
+const double = x => x * 2
+const add = (a, b) => a + b
+const greet = name => \`Hello, \${name}!\`
+const multi = (x) => {
+  const doubled = x * 2
+  return doubled + 1
+}`,
+        python: `# Lambda — single expression only:
+double = lambda x: x * 2
+add = lambda a, b: a + b
+
+# For complexity, use def:
+def multi(x):
+    doubled = x * 2
+    return doubled + 1`,
+      },
+      {
+        id: 'fn-defaults',
+        title: 'Default parameters',
+        note: "Both support default values. Python default args must come after required args.",
+        js: `function greet(name = 'World') {
+  return \`Hello, \${name}!\`
+}
+greet()          // 'Hello, World!'
+greet('Alice')   // 'Hello, Alice!'`,
+        python: `def greet(name='World'):
+    return f'Hello, {name}!'
+
+greet()          # 'Hello, World!'
+greet('Alice')   # 'Hello, Alice!'`,
+      },
+      {
+        id: 'fn-rest-args',
+        title: 'Rest (...args) vs *args',
+        note: 'Collect extra positional arguments into an array/tuple.',
+        js: `function sum(...nums) {
+  return nums.reduce((a, b) => a + b, 0)
+}
+sum(1, 2, 3)   // 6
+
+// Must be last param:
+function first(a, b, ...rest) {
+  console.log(rest)  // remaining args
+}`,
+        python: `def sum_all(*nums):
+    return sum(nums)
+
+sum_all(1, 2, 3)   # 6
+
+# Must be last positional param:
+def first(a, b, *rest):
+    print(rest)   # remaining as tuple`,
+      },
+      {
+        id: 'fn-kwargs',
+        title: 'Keyword arguments (**kwargs)',
+        note: "Python has named keyword arguments and **kwargs. JS simulates this with destructured objects.",
+        js: `// JS: use destructuring for named args:
+function create({ name, age = 0 } = {}) {
+  return { name, age }
+}
+create({ name: 'Alice', age: 30 })
+create({ name: 'Bob' })  // age defaults to 0`,
+        python: `# Python: keyword args are built in:
+def create(name, age=0):
+    return {'name': name, 'age': age}
+
+create('Alice', age=30)  # order doesn't matter
+create(name='Bob')
+
+# **kwargs collects all extra keyword args:
+def log(**kwargs):
+    for k, v in kwargs.items():
+        print(k, v)
+
+log(user='Alice', level='info')`,
+      },
+      {
+        id: 'fn-return-multiple',
+        title: 'Return multiple values',
+        note: 'Python can return multiple values as a tuple. JS returns a single value — use an array or object.',
+        js: `// Return array and destructure:
+function minMax(arr) {
+  return [Math.min(...arr), Math.max(...arr)]
+}
+const [min, max] = minMax([3, 1, 4, 1, 5])
+
+// Return object:
+function stats(arr) {
+  return { min: Math.min(...arr), max: Math.max(...arr) }
+}
+const { min: mn, max: mx } = stats([1,2,3])`,
+        python: `def min_max(lst):
+    return min(lst), max(lst)  # returns a tuple
+
+lo, hi = min_max([3, 1, 4, 1, 5])  # unpack`,
+      },
+    ],
+  },
+  {
+    category: 'Types & Casting',
+    items: [
+      {
+        id: 'casting-number',
+        title: 'String → Number',
+        note: "JS: Number(), parseInt(), parseFloat(). Python: int(), float(). JS is lenient; Python throws on invalid input.",
+        js: `Number('42')       // 42
+Number('3.14')     // 3.14
+Number('')         // 0
+Number('abc')      // NaN — no error thrown
+parseInt('42px')   // 42 — stops at non-digit
+parseFloat('3.14x')// 3.14`,
+        python: `int('42')        # 42
+float('3.14')    # 3.14
+int('')          # ValueError
+int('abc')       # ValueError
+int('42px')      # ValueError — no partial parse`,
+      },
+      {
+        id: 'casting-string',
+        title: 'Number → String',
+        note: 'Both convert numbers to strings easily. JS also uses toString().',
+        js: `String(42)     // '42'
+String(3.14)   // '3.14'
+(42).toString() // '42'
+\`\${42}\`        // '42' — template literal`,
+        python: `str(42)     # '42'
+str(3.14)   # '3.14'
+f'{42}'     # '42' — f-string`,
+      },
+      {
+        id: 'casting-bool',
+        title: 'Casting to Boolean',
+        note: 'Convert values to boolean. JS: Boolean(). Python: bool().',
+        js: `Boolean(1)         // true
+Boolean(0)         // false
+Boolean('')        // false
+Boolean('hello')   // true
+Boolean([])        // true ← gotcha! empty array is truthy in JS
+Boolean(null)      // false`,
+        python: `bool(1)        # True
+bool(0)        # False
+bool('')       # False
+bool('hello')  # True
+bool([])       # False ← empty list is falsy in Python
+bool(None)     # False`,
+      },
+      {
+        id: 'destructuring',
+        title: 'Destructuring vs unpacking',
+        note: 'Extract values from arrays/lists and objects/dicts into variables.',
+        js: `// Array destructuring:
+const [a, b, c] = [1, 2, 3]
+const [first, ...rest] = [1, 2, 3, 4]  // rest=[2,3,4]
+
+// Object destructuring:
+const { name, age } = { name: 'Alice', age: 30 }
+const { name: n, age: a2 = 0 } = { name: 'Bob' }  // rename + default`,
+        python: `# Sequence unpacking:
+a, b, c = [1, 2, 3]
+first, *rest = [1, 2, 3, 4]  # rest=[2,3,4]
+
+# Dict unpacking — not directly, but:
+person = {'name': 'Alice', 'age': 30}
+name = person['name']
+# or:
+name, age = person['name'], person['age']`,
+      },
+    ],
+  },
+  {
+    category: 'Async & Errors',
+    items: [
+      {
+        id: 'try-catch',
+        title: 'try/catch vs try/except',
+        note: "Error handling syntax differs by name. Python also has an else clause (runs if no exception).",
+        js: `try {
+  const data = JSON.parse(badJson)
+} catch (err) {
+  console.error(err.message)
+} finally {
+  console.log('always runs')
+}`,
+        python: `try:
+    data = json.loads(bad_json)
+except json.JSONDecodeError as e:
+    print(e)
+except Exception as e:
+    print('any error:', e)
+else:
+    print('no error — runs only if try succeeded')
+finally:
+    print('always runs')`,
+      },
+      {
+        id: 'throw-raise',
+        title: 'throw vs raise',
+        note: 'JS uses throw, Python uses raise. Both can throw built-in or custom errors.',
+        js: `throw new Error('something went wrong')
+throw new TypeError('expected a string')
+
+// Custom error:
+class ValidationError extends Error {
+  constructor(msg) { super(msg); this.name = 'ValidationError' }
+}
+throw new ValidationError('invalid input')`,
+        python: `raise ValueError('something went wrong')
+raise TypeError('expected a string')
+
+# Custom exception:
+class ValidationError(Exception):
+    pass
+
+raise ValidationError('invalid input')`,
+      },
+      {
+        id: 'async-await',
+        title: 'async / await',
+        note: 'Both use async/await but JS returns Promises; Python uses coroutines with asyncio.',
+        js: `async function fetchData(url) {
+  try {
+    const res = await fetch(url)
+    const data = await res.json()
+    return data
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+fetchData(url).then(data => console.log(data))`,
+        python: `import asyncio
+import aiohttp
+
+async def fetch_data(url):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as resp:
+            return await resp.json()
+
+asyncio.run(fetch_data(url))`,
+      },
+    ],
+  },
+  {
+    category: 'Misc / Gotchas',
+    items: [
+      {
+        id: 'ternary',
+        title: 'Ternary operator',
+        note: 'JS uses condition ? a : b. Python uses a if condition else b.',
+        js: `const age = 20
+const label = age >= 18 ? 'adult' : 'minor'
+
+// Nested (avoid):
+const x = a ? 'a' : b ? 'b' : 'c'`,
+        python: `age = 20
+label = 'adult' if age >= 18 else 'minor'
+
+# Nested (avoid):
+x = 'a' if a else ('b' if b else 'c')`,
+      },
+      {
+        id: 'short-circuit',
+        title: 'Short-circuit: &&, ||, ?? vs and, or',
+        note: 'JS and Python both short-circuit. JS adds the nullish coalescing operator (??) which Python lacks natively.',
+        js: `// && — returns first falsy or last value:
+null && 'hello'   // null
+'hi' && 'hello'   // 'hello'
+
+// || — returns first truthy or last value:
+null || 'default'  // 'default'
+0 || 'fallback'    // 'fallback' ← 0 is falsy
+
+// ?? — only null/undefined triggers fallback:
+0 ?? 'fallback'    // 0 ← 0 is NOT null/undefined
+null ?? 'fallback' // 'fallback'`,
+        python: `# and — returns first falsy or last value:
+None and 'hello'   # None
+'hi' and 'hello'   # 'hello'
+
+# or — returns first truthy or last value:
+None or 'default'  # 'default'
+0 or 'fallback'    # 'fallback'
+
+# No ?? in Python — use:
+x = val if val is not None else 'default'`,
+      },
+      {
+        id: 'list-comprehension',
+        title: 'List comprehension (Python only)',
+        note: 'Python list comprehensions are a concise way to build lists. JS uses map/filter instead.',
+        js: `// JS equivalent — use map/filter:
+const nums = [1, 2, 3, 4, 5]
+nums.map(x => x ** 2)                   // [1,4,9,16,25]
+nums.filter(x => x % 2 === 0)           // [2,4]
+nums.filter(x => x%2===0).map(x=>x**2) // [4,16]`,
+        python: `nums = [1, 2, 3, 4, 5]
+
+[x**2 for x in nums]                    # [1,4,9,16,25]
+[x for x in nums if x % 2 == 0]         # [2,4]
+[x**2 for x in nums if x % 2 == 0]      # [4,16]
+
+# Dict comprehension:
+{k: v*2 for k, v in {'a':1,'b':2}.items()}  # {'a':2,'b':4}`,
+      },
+      {
+        id: 'import',
+        title: 'import / require vs import',
+        note: 'JS has both CommonJS (require) and ES Modules (import). Python uses import with a consistent syntax.',
+        js: `// ES Modules (modern):
+import { useState } from 'react'
+import React from 'react'
+import * as utils from './utils'
+
+// CommonJS (Node.js older style):
+const fs = require('fs')
+const { join } = require('path')`,
+        python: `import os
+import json
+from pathlib import Path
+from datetime import datetime, timedelta
+
+# Alias:
+import numpy as np
+
+# Relative import (inside a package):
+from .utils import helper`,
+      },
+      {
+        id: 'equality',
+        title: '== vs === vs Python ==',
+        note: "JS has both == (loose, type coerces) and === (strict, no coercion). Python's == always compares values with type awareness.",
+        js: `// == coerces types — avoid:
+0 == false    // true ← ⚠️
+'' == false   // true ← ⚠️
+null == undefined  // true ← sometimes useful
+
+// === strict — always use this:
+0 === false   // false
+1 === 1       // true
+'1' === 1     // false`,
+        python: `# Python == always type-aware:
+0 == False    # True (bool is a subtype of int)
+1 == True     # True
+'' == False   # False ← no coercion
+
+# Use 'is' for identity (like ===):
+a is b        # same object in memory
+a is None     # preferred None check`,
+      },
+    ],
+  },
 ]
