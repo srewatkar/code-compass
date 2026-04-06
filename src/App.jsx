@@ -5,8 +5,10 @@ import DetailPanel from './components/DetailPanel'
 import './App.css'
 
 export default function App() {
-  const [selectedId, setSelectedId] = useState(null)
+  const [selectedId, setSelectedId] = useState(topics[0]?.items[0]?.id ?? null)
   const [searchQuery, setSearchQuery] = useState('')
+
+  const totalTopics = topics.reduce((sum, cat) => sum + cat.items.length, 0)
 
   const selectedTopic = useMemo(() => {
     for (const cat of topics) {
@@ -21,7 +23,7 @@ export default function App() {
       <div className="search-bar">
         <input
           type="text"
-          placeholder="🔍 Search comparisons..."
+          placeholder={`🔍 Search ${totalTopics} comparisons...`}
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
         />

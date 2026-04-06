@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import './Sidebar.css'
 
 export default function Sidebar({ topics, selectedId, onSelect, searchQuery }) {
@@ -15,6 +16,13 @@ export default function Sidebar({ topics, selectedId, onSelect, searchQuery }) {
       ),
     }))
     .filter(cat => cat.items.length > 0)
+
+  // Auto-select first result when search changes
+  useEffect(() => {
+    if (q && filtered.length > 0) {
+      onSelect(filtered[0].items[0].id)
+    }
+  }, [q])
 
   if (filtered.length === 0) {
     return (
