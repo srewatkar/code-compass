@@ -325,4 +325,223 @@ else:
       },
     ],
   },
+  {
+    category: 'Strings',
+    items: [
+      {
+        id: 'string-create',
+        title: 'Create strings & quote styles',
+        note: 'Both support single and double quotes. JS adds backtick template literals. Python adds triple quotes for multi-line.',
+        js: `let a = 'single quotes'
+let b = "double quotes"
+let c = \`backtick — template literal\`
+let multi = \`line one
+line two\``,
+        python: `a = 'single quotes'
+b = "double quotes"
+c = f'f-string (like template literal)'
+multi = """line one
+line two"""
+also = '''also multi-line'''`,
+      },
+      {
+        id: 'template-fstring',
+        title: 'Template literals vs f-strings',
+        note: 'JS uses backticks with ${} interpolation. Python 3.6+ uses f-strings with {} interpolation.',
+        js: `const name = 'Alice'
+const age = 30
+
+const msg = \`Hello, \${name}! You are \${age} years old.\`
+const math = \`2 + 2 = \${2 + 2}\`
+const method = \`\${name.toUpperCase()} wins!\``,
+        python: `name = 'Alice'
+age = 30
+
+msg = f'Hello, {name}! You are {age} years old.'
+math = f'2 + 2 = {2 + 2}'
+method = f'{name.upper()} wins!'
+
+# Older style (still works):
+old = 'Hello, {}!'.format(name)
+older = 'Hello, %s!' % name`,
+      },
+      {
+        id: 'string-split',
+        title: 'split()',
+        note: "Both split strings into arrays/lists by a delimiter. Behavior is nearly identical.",
+        js: `'a,b,c'.split(',')         // ['a', 'b', 'c']
+'hello world'.split(' ')  // ['hello', 'world']
+'hello'.split('')          // ['h','e','l','l','o']
+'a,b,c'.split(',', 2)     // ['a', 'b'] — limit`,
+        python: `'a,b,c'.split(',')          # ['a', 'b', 'c']
+'hello world'.split(' ')   # ['hello', 'world']
+list('hello')              # ['h','e','l','l','o']
+'a,b,c'.split(',', 2)      # ['a', 'b', 'c'] ← maxsplit differs!
+# Note: Python's maxsplit splits at most N times`,
+      },
+      {
+        id: 'string-join',
+        title: 'join()',
+        note: 'JS: array.join(separator). Python: separator.join(iterable) — reversed from JS, which trips people up.',
+        js: `['a', 'b', 'c'].join(',')   // 'a,b,c'
+['hello', 'world'].join(' ')  // 'hello world'
+['a', 'b', 'c'].join('')    // 'abc'`,
+        python: `','.join(['a', 'b', 'c'])    # 'a,b,c'
+' '.join(['hello', 'world']) # 'hello world'
+''.join(['a', 'b', 'c'])    # 'abc'
+
+# Common gotcha — must be strings:
+# ','.join([1, 2, 3])  ← TypeError
+','.join(str(x) for x in [1, 2, 3])  # '1,2,3'`,
+      },
+      {
+        id: 'string-slice',
+        title: 'slice / substring',
+        note: 'JS has slice() and substring(). Python uses slice notation [start:end:step] which is more powerful.',
+        js: `const s = 'hello world'
+
+s.slice(0, 5)      // 'hello'
+s.slice(6)         // 'world'
+s.slice(-5)        // 'world' — negative counts from end
+s.substring(0, 5)  // 'hello' (no negatives)`,
+        python: `s = 'hello world'
+
+s[0:5]    # 'hello'
+s[6:]     # 'world'
+s[-5:]    # 'world' — negative index
+s[::2]    # 'hlowrd' — every 2nd char (step)
+s[::-1]   # 'dlrow olleh' — reverse!`,
+      },
+      {
+        id: 'string-length',
+        title: 'length vs len()',
+        note: 'JS uses the .length property. Python uses the len() built-in function.',
+        js: `'hello'.length    // 5
+''.length          // 0
+
+const s = 'world'
+s.length           // 5`,
+        python: `len('hello')    # 5
+len('')        # 0
+
+s = 'world'
+len(s)         # 5`,
+      },
+      {
+        id: 'string-case',
+        title: 'toUpperCase / toLowerCase vs upper / lower',
+        note: 'Almost identical — JS uses camelCase method names, Python uses snake_case.',
+        js: `'hello'.toUpperCase()   // 'HELLO'
+'WORLD'.toLowerCase()   // 'world'`,
+        python: `'hello'.upper()   # 'HELLO'
+'WORLD'.lower()   # 'world'
+'hello world'.title()   # 'Hello World'
+'Hello World'.swapcase() # 'hELLO wORLD'`,
+      },
+      {
+        id: 'string-trim',
+        title: 'trim() vs strip()',
+        note: 'Removes whitespace from start/end of a string. JS: trim/trimStart/trimEnd. Python: strip/lstrip/rstrip.',
+        js: `'  hello  '.trim()        // 'hello'
+'  hello  '.trimStart()   // 'hello  '
+'  hello  '.trimEnd()     // '  hello'`,
+        python: `'  hello  '.strip()    # 'hello'
+'  hello  '.lstrip()  # 'hello  '
+'  hello  '.rstrip()  # '  hello'
+
+# Also strips specific characters:
+'###hello###'.strip('#')  # 'hello'`,
+      },
+      {
+        id: 'string-includes',
+        title: 'includes() vs in operator',
+        note: 'Check if a value exists. JS uses .includes(); Python uses in.',
+        js: `'hello world'.includes('world')   // true
+'hello world'.includes('xyz')     // false
+'hello world'.includes('Hello')   // false — case sensitive`,
+        python: `'world' in 'hello world'    # True
+'xyz' in 'hello world'      # False
+'Hello' in 'hello world'    # False — case sensitive`,
+      },
+      {
+        id: 'string-replace',
+        title: 'replace() / replaceAll()',
+        note: "JS replace() replaces first match by default; replaceAll() replaces all. Python replace() replaces all by default.",
+        js: `'aabbcc'.replace('b', 'X')     // 'aaXbcc' — only first!
+'aabbcc'.replaceAll('b', 'X')  // 'aaXXcc' — all
+'aabbcc'.replace(/b/g, 'X')   // 'aaXXcc' — regex all`,
+        python: `'aabbcc'.replace('b', 'X')      # 'aaXXcc' — all by default
+'aabbcc'.replace('b', 'X', 1)  # 'aaXbcc' — limit to 1`,
+      },
+      {
+        id: 'string-startswith',
+        title: 'startsWith() / endsWith()',
+        note: 'Nearly identical. Python also accepts a tuple of prefixes/suffixes to check multiple at once.',
+        js: `'hello world'.startsWith('hello')  // true
+'hello world'.endsWith('world')   // true
+'hello world'.startsWith('world') // false`,
+        python: `'hello world'.startswith('hello')  # True
+'hello world'.endswith('world')   # True
+
+# Python bonus — check multiple:
+'hello'.startswith(('hi', 'hello', 'hey'))  # True`,
+      },
+      {
+        id: 'string-repeat',
+        title: 'repeat() vs string multiplication',
+        note: 'JS uses .repeat(). Python uses the * operator directly on the string.',
+        js: `'ha'.repeat(3)   // 'hahaha'
+'-'.repeat(10)   // '----------'`,
+        python: `'ha' * 3    # 'hahaha'
+'-' * 10    # '----------'`,
+      },
+      {
+        id: 'string-pad',
+        title: 'padStart() / padEnd()',
+        note: 'JS has padStart/padEnd. Python uses ljust/rjust/center or f-string formatting.',
+        js: `'5'.padStart(3, '0')   // '005'
+'hi'.padEnd(5, '.')    // 'hi...'`,
+        python: `'5'.zfill(3)         # '005'
+'hi'.ljust(5, '.')  # 'hi...'
+'hi'.rjust(5, '.')  # '...hi'
+'hi'.center(6, '-') # '--hi--'
+
+# f-string formatting:
+f'{"5":>03}'        # '005'`,
+      },
+      {
+        id: 'string-to-number',
+        title: 'String ↔ Number conversion',
+        note: "JS uses Number(), parseInt(), parseFloat(). Python uses int() and float(). JS is lenient; Python throws on invalid input.",
+        js: `Number('42')        // 42
+Number('3.14')      // 3.14
+Number('hello')     // NaN ← doesn't throw
+parseInt('42px')    // 42 — parses until non-digit
+parseFloat('3.14x') // 3.14
+
+String(42)          // '42'
+(42).toString()     // '42'`,
+        python: `int('42')           # 42
+float('3.14')       # 3.14
+int('hello')        # ValueError ← throws
+int('42px')         # ValueError — no partial parse
+
+str(42)             # '42'`,
+      },
+      {
+        id: 'string-charat',
+        title: 'charAt() / indexing',
+        note: 'Python treats strings like sequences — index with []. JS uses bracket notation or charAt().',
+        js: `const s = 'hello'
+s[0]           // 'h'
+s.charAt(0)    // 'h'
+s[s.length-1]  // 'o'
+s[-1]          // undefined ← no negative indexing in JS`,
+        python: `s = 'hello'
+s[0]    # 'h'
+s[-1]   # 'o' — negative indexing works!
+s[-2]   # 'l'`,
+      },
+    ],
+  },
 ]
