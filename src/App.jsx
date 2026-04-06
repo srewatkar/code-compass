@@ -1,9 +1,20 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
+import { topics } from './data/topics'
+import Sidebar from './components/Sidebar'
+import DetailPanel from './components/DetailPanel'
 import './App.css'
 
 export default function App() {
   const [selectedId, setSelectedId] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
+
+  const selectedTopic = useMemo(() => {
+    for (const cat of topics) {
+      const found = cat.items.find(item => item.id === selectedId)
+      if (found) return found
+    }
+    return null
+  }, [selectedId])
 
   return (
     <div className="app">
@@ -16,7 +27,13 @@ export default function App() {
         />
       </div>
       <div className="main">
-        {/* Sidebar and DetailPanel go here */}
+        <Sidebar
+          topics={topics}
+          selectedId={selectedId}
+          onSelect={setSelectedId}
+          searchQuery={searchQuery}
+        />
+        <DetailPanel topic={selectedTopic} />
       </div>
     </div>
   )
