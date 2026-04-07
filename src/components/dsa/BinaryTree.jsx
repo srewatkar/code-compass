@@ -18,6 +18,30 @@ function getSearchPath(node, val, path = []) {
   return getSearchPath(node.right, val, path)
 }
 
+function inorder(node, result = []) {
+  if (!node) return result
+  inorder(node.left, result)
+  result.push(node.value)
+  inorder(node.right, result)
+  return result
+}
+
+function preorder(node, result = []) {
+  if (!node) return result
+  result.push(node.value)
+  preorder(node.left, result)
+  preorder(node.right, result)
+  return result
+}
+
+function postorder(node, result = []) {
+  if (!node) return result
+  postorder(node.left, result)
+  postorder(node.right, result)
+  result.push(node.value)
+  return result
+}
+
 function calcPositions(node, x, y, spread, result = []) {
   if (!node) return result
   result.push({ value: node.value, x, y })
@@ -54,6 +78,7 @@ export default function BinaryTree({ view }) {
   const [tree, setTree] = useState(buildInitial)
   const [inputVal, setInputVal] = useState('')
   const [highlighted, setHighlighted] = useState([])
+  const [highlightMode, setHighlightMode] = useState('search') // 'search' | 'traversal'
   const [log, setLog] = useState(['Tree initialized with values: 5, 3, 8, 1, 4'])
 
   const addLog = (msg) => setLog(prev => [msg, ...prev])
@@ -79,6 +104,7 @@ export default function BinaryTree({ view }) {
     if (isNaN(val) || inputVal.trim() === '') return
     const path = getSearchPath(tree, val)
     const found = path.length > 0 && path[path.length - 1] === val
+    setHighlightMode('search')
     setHighlighted(path)
     addLog(found
       ? `Found ${val}! Path: ${path.join(' → ')}`
@@ -86,6 +112,22 @@ export default function BinaryTree({ view }) {
     )
     setInputVal('')
     setTimeout(() => setHighlighted([]), 2000)
+  }
+
+  const doTraversal = (type) => {
+    if (!tree) return
+    const order = type === 'inorder' ? inorder(tree)
+      : type === 'preorder' ? preorder(tree)
+      : postorder(tree)
+    const label = type === 'inorder' ? 'Inorder (L→Root→R)'
+      : type === 'preorder' ? 'Preorder (Root→L→R)'
+      : 'Postorder (L→R→Root)'
+    addLog(`${label}: ${order.join(' → ')}`)
+    setHighlightMode('traversal')
+    order.forEach((val, i) => {
+      setTimeout(() => setHighlighted([val]), i * 500)
+    })
+    setTimeout(() => setHighlighted([]), order.length * 500 + 300)
   }
 
   const clear = () => {
@@ -103,7 +145,7 @@ export default function BinaryTree({ view }) {
   const edges = tree ? calcEdges(tree, svgW / 2, 30, 100) : []
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
       <div className="ds-controls">
         <input
           className="ds-input"
@@ -113,9 +155,16 @@ export default function BinaryTree({ view }) {
           placeholder="number"
           type="number"
         />
-        <button type="button" className="ds-btn" onClick={insert}>Insert</button>
-        <button type="button" className="ds-btn secondary" onClick={search} disabled={!tree}>Search</button>
-        <button type="button" className="ds-btn secondary" onClick={clear}>Clear</button>
+        <button type="button" className="ds-btn" title="Insert a number into the BST (smaller → left, larger → right)" onClick={insert}>Insert</button>
+        <button type="button" className="ds-btn secondary" title="Search for a value — highlights the path taken" onClick={search} disabled={!tree}>Search</button>
+        <button type="button" className="ds-btn secondary" title="Remove all nodes from the tree" onClick={clear}>Clear</button>
+      </div>
+
+      <div className="ds-controls" style={{ marginTop: -8 }}>
+        <span style={{ fontSize: 11, color: '#94a3b8', fontWeight: 600, letterSpacing: 0.5, textTransform: 'uppercase', marginRight: 4 }}>Traversals:</span>
+        <button type="button" className="ds-btn secondary" title="Left → Root → Right. Visits nodes in sorted order." onClick={() => doTraversal('inorder')} disabled={!tree}>Inorder</button>
+        <button type="button" className="ds-btn secondary" title="Root → Left → Right. Used for copying or serializing the tree." onClick={() => doTraversal('preorder')} disabled={!tree}>Preorder</button>
+        <button type="button" className="ds-btn secondary" title="Left → Right → Root. Used for deleting the tree." onClick={() => doTraversal('postorder')} disabled={!tree}>Postorder</button>
       </div>
 
       <div className="ds-visual-label">Binary Search Tree</div>
@@ -132,13 +181,14 @@ export default function BinaryTree({ view }) {
           ))}
           {positions.map((pos, i) => {
             const isHighlighted = highlighted.includes(pos.value)
-            const isFound = isHighlighted && highlighted[highlighted.length - 1] === pos.value
+            const isSearchFound = highlightMode === 'search' && isHighlighted && highlighted[highlighted.length - 1] === pos.value
+            const isTraversal = highlightMode === 'traversal' && isHighlighted
             return (
               <g key={i}>
                 <circle
                   cx={pos.x} cy={pos.y} r={20}
-                  fill={isFound ? '#7c3aed' : isHighlighted ? '#ede9fe' : '#f8faff'}
-                  stroke={isHighlighted ? '#7c3aed' : '#e2e8f0'}
+                  fill={isSearchFound ? '#7c3aed' : isHighlighted ? '#ede9fe' : '#f8faff'}
+                  stroke={isTraversal ? '#f59e0b' : isHighlighted ? '#7c3aed' : '#e2e8f0'}
                   strokeWidth={isHighlighted ? 2 : 1}
                 />
                 <text
@@ -146,7 +196,7 @@ export default function BinaryTree({ view }) {
                   textAnchor="middle" dominantBaseline="middle"
                   fontSize={13} fontWeight={isHighlighted ? 700 : 500}
                   fontFamily="monospace"
-                  fill={isFound ? '#ffffff' : isHighlighted ? '#7c3aed' : '#334155'}
+                  fill={isSearchFound ? '#ffffff' : isHighlighted ? '#7c3aed' : '#334155'}
                 >
                   {pos.value}
                 </text>

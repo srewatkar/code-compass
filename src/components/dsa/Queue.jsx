@@ -41,7 +41,7 @@ export default function Queue({ view }) {
   if (view === 'code') return <DsaCodeView blocks={dsaTopics.queue} />
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
       <div className="ds-controls">
         <input
           className="ds-input"
@@ -50,10 +50,10 @@ export default function Queue({ view }) {
           onKeyDown={e => e.key === 'Enter' && enqueue()}
           placeholder="value"
         />
-        <button type="button" className="ds-btn" onClick={enqueue}>Enqueue</button>
-        <button type="button" className="ds-btn secondary" onClick={dequeue} disabled={queue.length === 0}>Dequeue</button>
-        <button type="button" className="ds-btn secondary" onClick={peek} disabled={queue.length === 0}>Peek</button>
-        <button type="button" className="ds-btn secondary" onClick={clear}>Clear</button>
+        <button type="button" className="ds-btn" title="Add value to the back of the queue" onClick={enqueue}>Enqueue</button>
+        <button type="button" className="ds-btn secondary" title="Remove and return the front value" onClick={dequeue} disabled={queue.length === 0}>Dequeue</button>
+        <button type="button" className="ds-btn secondary" title="View the front value without removing it" onClick={peek} disabled={queue.length === 0}>Peek</button>
+        <button type="button" className="ds-btn secondary" title="Remove all values from the queue" onClick={clear}>Clear</button>
       </div>
 
       <div className="ds-visual-label">Queue (front → back)</div>

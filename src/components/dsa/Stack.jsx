@@ -44,7 +44,7 @@ export default function Stack({ view }) {
   if (view === 'code') return <DsaCodeView blocks={dsaTopics.stack} />
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
       <div className="ds-controls">
         <input
           className="ds-input"
@@ -54,10 +54,10 @@ export default function Stack({ view }) {
           placeholder="value"
           type="text"
         />
-        <button type="button" className="ds-btn" onClick={push}>Push</button>
-        <button type="button" className="ds-btn secondary" onClick={pop} disabled={stack.length === 0}>Pop</button>
-        <button type="button" className="ds-btn secondary" onClick={peek} disabled={stack.length === 0}>Peek</button>
-        <button type="button" className="ds-btn secondary" onClick={clear}>Clear</button>
+        <button type="button" className="ds-btn" title="Add value to the top of the stack" onClick={push}>Push</button>
+        <button type="button" className="ds-btn secondary" title="Remove and return the top value" onClick={pop} disabled={stack.length === 0}>Pop</button>
+        <button type="button" className="ds-btn secondary" title="View the top value without removing it" onClick={peek} disabled={stack.length === 0}>Peek</button>
+        <button type="button" className="ds-btn secondary" title="Remove all values from the stack" onClick={clear}>Clear</button>
       </div>
 
       <div className="ds-visual-label">Stack (top → bottom)</div>

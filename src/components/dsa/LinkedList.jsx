@@ -58,7 +58,7 @@ export default function LinkedList({ view }) {
   if (view === 'code') return <DsaCodeView blocks={dsaTopics.linkedlist} />
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
       <div className="ds-controls">
         <input
           className="ds-input"
@@ -66,10 +66,10 @@ export default function LinkedList({ view }) {
           onChange={e => setInputVal(e.target.value)}
           placeholder="value"
         />
-        <button type="button" className="ds-btn" onClick={append}>Append</button>
-        <button type="button" className="ds-btn" onClick={prepend}>Prepend</button>
-        <button type="button" className="ds-btn secondary" onClick={deleteNode} disabled={list.length === 0}>Delete</button>
-        <button type="button" className="ds-btn secondary" onClick={clear}>Clear</button>
+        <button type="button" className="ds-btn" title="Add value to the end of the list (O(n))" onClick={append}>Append</button>
+        <button type="button" className="ds-btn" title="Add value to the beginning of the list (O(1))" onClick={prepend}>Prepend</button>
+        <button type="button" className="ds-btn secondary" title="Find and remove the node with this value" onClick={deleteNode} disabled={list.length === 0}>Delete</button>
+        <button type="button" className="ds-btn secondary" title="Remove all nodes from the list" onClick={clear}>Clear</button>
       </div>
 
       <div className="ds-visual-label">Linked List (head → tail)</div>

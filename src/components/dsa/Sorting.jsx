@@ -130,7 +130,7 @@ export default function Sorting({ view }) {
   if (view === 'code') return <DsaCodeView blocks={dsaTopics.sorting} />
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
       {/* Algorithm picker */}
       <div className="ds-controls" style={{ marginBottom: 12 }}>
         {Object.entries(ALGORITHMS).map(([key, { label }]) => (
@@ -155,8 +155,8 @@ export default function Sorting({ view }) {
           placeholder="e.g. 5,3,8,1,6"
           onKeyDown={e => e.key === 'Enter' && applyCustom()}
         />
-        <button type="button" className="ds-btn secondary" onClick={applyCustom}>Use custom array</button>
-        <button type="button" className="ds-btn secondary" onClick={() => reset(algo)}>Reset default</button>
+        <button type="button" className="ds-btn secondary" title="Use your comma-separated numbers as the input array" onClick={applyCustom}>Use custom array</button>
+        <button type="button" className="ds-btn secondary" title="Go back to the default array [5, 3, 8, 1, 6, 2, 7, 4]" onClick={() => reset(algo)}>Reset default</button>
       </div>
 
       {/* Bar chart */}
@@ -201,12 +201,12 @@ export default function Sorting({ view }) {
 
       {/* Controls */}
       <div className="ds-controls">
-        <button type="button" className="ds-btn secondary" onClick={prev} disabled={stepIdx === 0}>◀ Prev</button>
-        <button type="button" className="ds-btn" onClick={togglePlay} disabled={stepIdx === steps.length - 1}>
+        <button type="button" className="ds-btn secondary" title="Go back one step" onClick={prev} disabled={stepIdx === 0}>◀ Prev</button>
+        <button type="button" className="ds-btn" title="Auto-step through the algorithm at 400ms intervals" onClick={togglePlay} disabled={stepIdx === steps.length - 1}>
           {playing ? '⏸ Pause' : '▶ Play'}
         </button>
-        <button type="button" className="ds-btn secondary" onClick={next} disabled={stepIdx === steps.length - 1}>Next ▶</button>
-        <button type="button" className="ds-btn secondary" onClick={() => reset(algo)}>↺ Reset</button>
+        <button type="button" className="ds-btn secondary" title="Advance one step" onClick={next} disabled={stepIdx === steps.length - 1}>Next ▶</button>
+        <button type="button" className="ds-btn secondary" title="Restart from the beginning" onClick={() => reset(algo)}>↺ Reset</button>
       </div>
     </div>
   )
