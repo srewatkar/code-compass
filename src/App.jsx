@@ -22,7 +22,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <TopNav mode={mode} setMode={setMode} />
+      <TopNav mode={mode} onModeChange={setMode} />
 
       {mode === 'cheatsheet' && (
         <div className="cheatsheet-section">
@@ -47,7 +47,7 @@ export default function App() {
       )}
 
       {mode === 'dsa' && (
-        <div style={{ flex: 1, overflow: 'hidden' }}>
+        <div className="dsa-section">
           {/* DsaPanel added in Task 2 */}
         </div>
       )}
