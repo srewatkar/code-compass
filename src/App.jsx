@@ -1,10 +1,12 @@
 import { useState, useMemo } from 'react'
 import { topics } from './data/topics'
+import TopNav from './components/TopNav'
 import Sidebar from './components/Sidebar'
 import DetailPanel from './components/DetailPanel'
 import './App.css'
 
 export default function App() {
+  const [mode, setMode] = useState('cheatsheet')
   const [selectedId, setSelectedId] = useState(topics[0]?.items[0]?.id ?? null)
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -20,23 +22,35 @@ export default function App() {
 
   return (
     <div className="app">
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder={`🔍 Search ${totalTopics} comparisons...`}
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-        />
-      </div>
-      <div className="main">
-        <Sidebar
-          topics={topics}
-          selectedId={selectedId}
-          onSelect={setSelectedId}
-          searchQuery={searchQuery}
-        />
-        <DetailPanel topic={selectedTopic} />
-      </div>
+      <TopNav mode={mode} setMode={setMode} />
+
+      {mode === 'cheatsheet' && (
+        <div className="cheatsheet-section">
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder={`🔍 Search ${totalTopics} comparisons...`}
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <div className="main">
+            <Sidebar
+              topics={topics}
+              selectedId={selectedId}
+              onSelect={setSelectedId}
+              searchQuery={searchQuery}
+            />
+            <DetailPanel topic={selectedTopic} />
+          </div>
+        </div>
+      )}
+
+      {mode === 'dsa' && (
+        <div style={{ flex: 1, overflow: 'hidden' }}>
+          {/* DsaPanel added in Task 2 */}
+        </div>
+      )}
     </div>
   )
 }

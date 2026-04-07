@@ -1,0 +1,44 @@
+.top-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+.top-nav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+  transition: background 0.1s, color 0.1s;
+}
+
+.top-nav-btn:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+.top-nav-btn.active {
+  background: #ede9fe;
+  color: #7c3aed;
+  font-weight: 600;
+}
+
+.top-nav-btn:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.top-nav-btn .coming-soon {
+  font-size: 10px;
+  font-weight: 400;
+  color: #94a3b8;
+  margin-left: 4px;
+}
