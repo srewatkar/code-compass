@@ -3,6 +3,7 @@ import { topics } from './data/topics'
 import TopNav from './components/TopNav'
 import Sidebar from './components/Sidebar'
 import DetailPanel from './components/DetailPanel'
+import DsaPanel from './components/dsa/DsaPanel'
 import './App.css'
 
 export default function App() {
@@ -46,11 +47,7 @@ export default function App() {
         </div>
       )}
 
-      {mode === 'dsa' && (
-        <div className="dsa-section">
-          {/* DsaPanel added in Task 2 */}
-        </div>
-      )}
+      {mode === 'dsa' && <DsaPanel />}
     </div>
   )
 }
