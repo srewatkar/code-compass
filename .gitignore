@@ -15,6 +15,9 @@ dist-ssr
 # Claude Code / Superpowers plugin working directory
 .superpowers/
 
+# Git worktrees
+.worktrees/
+
 # Playwright MCP screenshots and logs
 .playwright-mcp/
 
