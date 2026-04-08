@@ -17,8 +17,12 @@ export default function TopNav({ mode, onModeChange }) {
       >
         DSA
       </button>
-      <button type="button" className="top-nav-btn" disabled>
-        Algo <span className="coming-soon">coming soon</span>
+      <button
+        type="button"
+        className={`top-nav-btn${mode === 'algo' ? ' active' : ''}`}
+        onClick={() => onModeChange('algo')}
+      >
+        Algo
       </button>
     </nav>
   )

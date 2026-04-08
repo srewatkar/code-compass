@@ -4,6 +4,7 @@ import TopNav from './components/TopNav'
 import Sidebar from './components/Sidebar'
 import DetailPanel from './components/DetailPanel'
 import DsaPanel from './components/dsa/DsaPanel'
+import AlgoPanel from './components/algo/AlgoPanel'
 import './App.css'
 
 export default function App() {
@@ -48,6 +49,7 @@ export default function App() {
       )}
 
       {mode === 'dsa' && <DsaPanel />}
+      {mode === 'algo' && <AlgoPanel />}
     </div>
   )
 }
