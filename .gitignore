@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Claude Code / Superpowers plugin working directory
+.superpowers/
+
+# Playwright MCP screenshots and logs
+.playwright-mcp/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
