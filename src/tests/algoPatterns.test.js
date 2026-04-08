@@ -6,7 +6,7 @@ const EXPECTED_IDS = [
   'bfs','dfs','backtracking','topological-sort',
   'binary-search','binary-search-on-answer',
   'dp-1d-memo','dp-1d-tab','dp-2d',
-  'hashmap','merge-intervals','heap',
+  'hashmap','merge-intervals','heap','recursion',
 ]
 
 describe('algoPatterns data', () => {
