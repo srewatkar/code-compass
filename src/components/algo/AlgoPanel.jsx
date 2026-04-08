@@ -18,6 +18,7 @@ import DP2D from './patterns/DP2D'
 import HashMap from './patterns/HashMap'
 import MergeIntervals from './patterns/MergeIntervals'
 import Heap from './patterns/Heap'
+import Recursion from './patterns/Recursion'
 import './AlgoPanel.css'
 
 const PATTERN_SIMULATORS = {
@@ -38,6 +39,7 @@ const PATTERN_SIMULATORS = {
   'hashmap': HashMap,
   'merge-intervals': MergeIntervals,
   'heap': Heap,
+  'recursion': Recursion,
 }
 
 export default function AlgoPanel() {
