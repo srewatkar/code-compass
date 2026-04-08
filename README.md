@@ -1,16 +1,48 @@
-# React + Vite
+# Code Compass
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A interactive reference tool for developers learning JavaScript and Python side-by-side, with visual data structure simulators and algorithmic pattern guides.
 
-Currently, two official plugins are available:
+## Sections
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Cheatsheet
+Side-by-side JS vs Python syntax comparisons across 80+ topics: strings, arrays, objects, loops, functions, async, types, and more. Searchable by keyword.
 
-## React Compiler
+### DSA (Data Structures & Algorithms)
+Interactive simulators for core data structures with step-through visualization and code templates:
+- **Stack** — push, pop, peek, clear
+- **Queue** — enqueue, dequeue, peek, clear
+- **Linked List** — append, prepend, delete, traverse, length, search, reverse
+- **Binary Tree** — insert, search, inorder/preorder/postorder/level-order traversals
+- **Sorting** — Bubble, Selection, Insertion sort with bar chart step-through
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Each simulator has a **Simulate** tab (interactive) and a **Code** tab (JS + Python templates).
 
-## Expanding the ESLint configuration
+### Algo (in progress)
+17 common algorithmic patterns with step-through simulators and code templates:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| Category | Patterns |
+|---|---|
+| Arrays & Strings | Sliding Window, Two Pointers, Fast & Slow Pointers, Prefix Sum, Monotonic Stack |
+| Trees & Graphs | BFS Template, DFS Template, Backtracking, Topological Sort |
+| Binary Search | Classic Binary Search, Binary Search on Answer |
+| Dynamic Programming | 1D Memoization, 1D Tabulation, 2D DP |
+| Other | Hash Map / Frequency, Merge Intervals, Heap / Priority Queue |
+
+## Tech Stack
+
+- **React 18** + Vite
+- **highlight.js** for syntax highlighting
+- **Vitest** + jsdom for tests (596 tests)
+- No other runtime dependencies
+
+## Running locally
+
+```bash
+npm install
+npm run dev
+```
+
+Tests:
+```bash
+npm test
+```
