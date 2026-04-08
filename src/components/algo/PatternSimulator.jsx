@@ -13,6 +13,11 @@ export default function PatternSimulator({ steps, renderStep }) {
     clearInterval(playRef.current)
   }, [steps])
 
+  // Stop playing state when last step is reached via autoplay
+  useEffect(() => {
+    if (playing && stepIdx >= steps.length - 1) setPlaying(false)
+  }, [stepIdx, playing, steps.length])
+
   useEffect(() => () => clearInterval(playRef.current), [])
 
   const currentStep = steps[stepIdx] ?? steps[0]
@@ -32,13 +37,13 @@ export default function PatternSimulator({ steps, renderStep }) {
     } else {
       setPlaying(true)
       playRef.current = setInterval(() => {
-        setStepIdx(prev => {
-          if (prev >= steps.length - 1) {
+        setStepIdx(idx => {
+          if (idx >= steps.length - 1) {
             clearInterval(playRef.current)
-            setPlaying(false)
-            return prev
+            playRef.current = null
+            return idx
           }
-          return prev + 1
+          return idx + 1
         })
       }, 500)
     }
