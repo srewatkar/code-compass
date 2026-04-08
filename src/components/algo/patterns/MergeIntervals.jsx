@@ -38,11 +38,12 @@ export function generateSteps() {
       const last = merged[merged.length - 1]
       if (cur[0] <= last[1]) {
         const newEnd = Math.max(last[1], cur[1])
-        log.unshift(`[${cur}] overlaps [${last}] (${cur[0]}<=${last[1]}): merge → [${last[0]},${newEnd}]`)
+        const originalEnd = last[1]
+        log.unshift(`[${cur}] overlaps [${last}] (${cur[0]}<=${originalEnd}): merge → [${last[0]},${newEnd}]`)
         last[1] = newEnd
         steps.push({
           visual: { intervals, sorted, merged: merged.map(m => [...m]), currentIdx: i, phase: 'merge' },
-          msg: `[${cur[0]},${cur[1]}] overlaps [${last[0]},${last[1]}] (${cur[0]}<=${last[1]}): merge → [${last[0]},${newEnd}]`,
+          msg: `[${cur[0]},${cur[1]}] overlaps [${last[0]},${originalEnd}] (${cur[0]}<=${originalEnd}): merge → [${last[0]},${newEnd}]`,
           log: [...log],
         })
       } else {
