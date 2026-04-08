@@ -104,7 +104,7 @@ export default function AlgoPanel() {
             : (() => {
                 const SimulatorComponent = PATTERN_SIMULATORS[selectedPattern.id]
                 return SimulatorComponent
-                  ? <SimulatorComponent />
+                  ? <SimulatorComponent key={selectedPattern.id} />
                   : <div>No simulator yet</div>
               })()
           }
