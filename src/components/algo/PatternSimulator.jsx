@@ -80,8 +80,8 @@ export default function PatternSimulator({ steps, renderStep }) {
         <div className="ds-log-entries">
           {currentStep.log.length === 0
             ? <span className="ds-empty-log">No operations yet</span>
-            : currentStep.log.map((entry, i) => (
-                <div key={i} className="ds-log-entry">{entry}</div>
+            : currentStep.log.map((entry) => (
+                <div key={entry} className="ds-log-entry">{entry}</div>
               ))
           }
         </div>
