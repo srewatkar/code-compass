@@ -14,9 +14,9 @@ describe('algoPatterns data', () => {
     expect(algoPatterns.length).toBe(5)
   })
 
-  it('has 17 total patterns', () => {
+  it('has 18 total patterns', () => {
     const total = algoPatterns.reduce((sum, cat) => sum + cat.patterns.length, 0)
-    expect(total).toBe(17)
+    expect(total).toBe(18)
   })
 
   it('has all expected pattern IDs', () => {
@@ -35,6 +35,12 @@ describe('algoPatterns data', () => {
         expect(cat.id).toBeTruthy()
         expect(cat.label).toBeTruthy()
       })
+
+      if (cat.id === 'other') {
+        it('has 4 patterns in other category', () => {
+          expect(cat.patterns.length).toBe(4)
+        })
+      }
 
       cat.patterns.forEach(pattern => {
         describe(`pattern: ${pattern.id}`, () => {

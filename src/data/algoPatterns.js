@@ -1235,6 +1235,56 @@ print(mf.find_median())  # 2.0`,
           },
         ],
       },
+      {
+        id: 'recursion',
+        title: 'Recursion',
+        whenToUse:
+          'Use when a problem can be broken into identical subproblems that reduce toward a base case — common in tree traversal, divide-and-conquer, and combinatorics. Watch for overlapping subproblems (consider memoization then).',
+        codeBlocks: [
+          {
+            id: 'rec-fibonacci',
+            title: 'Fibonacci (recursive)',
+            note: 'Classic recursion with two subproblems per call. Exponential time without memoization — each call spawns two more.',
+            js: `function fib(n) {
+  if (n <= 1) return n            // base case
+  return fib(n - 1) + fib(n - 2) // recursive case
+}
+
+console.log(fib(5)) // 5`,
+            python: `def fib(n):
+    if n <= 1:                  # base case
+        return n
+    return fib(n-1) + fib(n-2) # recursive case
+
+print(fib(5))  # 5`,
+          },
+          {
+            id: 'rec-binary-search',
+            title: 'Binary Search (recursive)',
+            note: 'Divide-and-conquer: halves the search space on each call. O(log n) time, O(log n) call stack space.',
+            js: `function binarySearch(arr, target, lo = 0, hi = arr.length - 1) {
+  if (lo > hi) return -1                      // base case: not found
+  const mid = Math.floor((lo + hi) / 2)
+  if (arr[mid] === target) return mid          // base case: found
+  if (arr[mid] < target)
+    return binarySearch(arr, target, mid + 1, hi)  // search right half
+  return binarySearch(arr, target, lo, mid - 1)    // search left half
+}
+
+console.log(binarySearch([1,3,5,7,9], 7)) // 3`,
+            python: `def binary_search(arr, target, lo=0, hi=None):
+    if hi is None: hi = len(arr) - 1
+    if lo > hi: return -1                       # base case: not found
+    mid = (lo + hi) // 2
+    if arr[mid] == target: return mid           # base case: found
+    if arr[mid] < target:
+        return binary_search(arr, target, mid+1, hi)
+    return binary_search(arr, target, lo, mid-1)
+
+print(binary_search([1,3,5,7,9], 7))  # 3`,
+          },
+        ],
+      },
     ],
   },
 ]
