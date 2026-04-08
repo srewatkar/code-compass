@@ -22,11 +22,12 @@ describe('Recursion (fib5) steps', () => {
     })
   })
 
-  it('first step: root is active, stack has fib(5)', () => {
+  it('first step: root is active, stack has fib(5) and length 1', () => {
     const first = steps[0]
     const root = first.visual.nodes.find(n => n.id === 'n5')
     expect(root.state).toBe('active')
     expect(first.visual.stack).toContain('fib(5)')
+    expect(first.visual.stack).toHaveLength(1)
   })
 
   it('last step: root is resolved with value 5, stack is empty', () => {
