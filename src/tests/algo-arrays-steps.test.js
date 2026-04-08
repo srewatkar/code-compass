@@ -22,6 +22,20 @@ describe('SlidingWindow steps', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.maxSum).toBe(9)
   })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
+  })
+  it('step 0 traces line 2 (init window loop)', () => {
+    expect(steps[0].currentLine).toBe(2)
+    expect(steps[0].variables.windowSum).toBe(8)
+  })
+  it('step 1 traces line 6 (slide: update windowSum)', () => {
+    expect(steps[1].currentLine).toBe(6)
+    expect(steps[1].variables.i).toBe(3)
+  })
 })
 
 describe('TwoPointers steps', () => {

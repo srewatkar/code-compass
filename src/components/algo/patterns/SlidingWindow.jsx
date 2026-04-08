@@ -1,5 +1,14 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+// Pull the JS and Python templates from the data file so there's one source of truth
+const category = algoPatterns.find(c => c.id === 'arrays')
+const pattern  = category.patterns.find(p => p.id === 'sliding-window')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks.find(b => b.id === 'sliding-window-fixed').js,
+  python: pattern.codeBlocks.find(b => b.id === 'sliding-window-fixed').python,
+}
 
 export function generateSteps() {
   const arr = [2, 1, 5, 1, 3, 2]
@@ -7,7 +16,6 @@ export function generateSteps() {
   const steps = []
   const log = []
 
-  // Build initial window
   let windowSum = arr[0] + arr[1] + arr[2]
   let maxSum = windowSum
   log.unshift(`Initial window [0..2] → sum=${windowSum}, max=${maxSum}`)
@@ -15,9 +23,10 @@ export function generateSteps() {
     visual: { arr, windowStart: 0, windowEnd: 2, currentSum: windowSum, maxSum, k },
     msg: `Initial window [0..2]: sum = ${windowSum}`,
     log: [...log],
+    currentLine: 2,
+    variables: { k, windowSum, maxSum },
   })
 
-  // Slide window
   for (let i = k; i < arr.length; i++) {
     windowSum += arr[i] - arr[i - k]
     maxSum = Math.max(maxSum, windowSum)
@@ -27,6 +36,8 @@ export function generateSteps() {
       visual: { arr, windowStart: start, windowEnd: i, currentSum: windowSum, maxSum, k },
       msg: `Window [${start}..${i}]: sum = ${windowSum}, max so far = ${maxSum}`,
       log: [...log],
+      currentLine: 6,
+      variables: { i, windowSum, maxSum },
     })
   }
 
@@ -35,6 +46,8 @@ export function generateSteps() {
     visual: { arr, windowStart: -1, windowEnd: -1, currentSum: windowSum, maxSum, k, done: true },
     msg: `Answer: max sum = ${maxSum}`,
     log: [...log],
+    currentLine: 9,
+    variables: { maxSum },
   })
 
   return steps
@@ -78,5 +91,11 @@ function SlidingWindowVisual({ step }) {
 
 export default function SlidingWindow() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <SlidingWindowVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <SlidingWindowVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }
