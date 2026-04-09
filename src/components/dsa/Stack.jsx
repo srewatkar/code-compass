@@ -3,7 +3,16 @@ import { dsaTopics } from '../../data/dsaTopics'
 import DsaCodeView from './DsaCodeView'
 import './dsa.css'
 
-export default function Stack({ view }) {
+const PUSH_JS  = `function push(stack, val) {\n  stack.push(val)      // O(1)\n  return stack.length\n}`
+const PUSH_PY  = `def push(stack, val):\n    stack.append(val)    # O(1)\n    return len(stack)`
+const POP_JS   = `function pop(stack) {\n  return stack.pop()   // O(1)\n}`
+const POP_PY   = `def pop(stack):\n    return stack.pop()   # O(1)`
+const PEEK_JS  = `function peek(stack) {\n  return stack[stack.length - 1]\n}`
+const PEEK_PY  = `def peek(stack):\n    return stack[-1]`
+const CLEAR_JS = `function clear(stack) {\n  stack.length = 0\n}`
+const CLEAR_PY = `def clear(stack):\n    stack.clear()`
+
+export default function Stack({ view, setTrace }) {
   const [stack, setStack] = useState([3, 7, 1])
   const [inputVal, setInputVal] = useState('')
   const [log, setLog] = useState(['Stack initialized with [3, 7, 1]'])
@@ -15,8 +24,10 @@ export default function Stack({ view }) {
     if (!val) return
     const num = isNaN(val) ? val : Number(val)
     setStack(prev => {
-      addLog(`Pushed ${num} → stack is now [${[...prev, num].join(', ')}]`)
-      return [...prev, num]
+      const next = [...prev, num]
+      addLog(`Pushed ${num} → stack is now [${next.join(', ')}]`)
+      setTrace?.({ jsCode: PUSH_JS, pyCode: PUSH_PY, activeLine: 1, variables: { val: num, stackSize: next.length } })
+      return next
     })
     setInputVal('')
   }
@@ -27,18 +38,22 @@ export default function Stack({ view }) {
     setStack(prev => {
       const next = prev.slice(0, -1)
       addLog(`Popped ${top} → stack is now [${next.join(', ')}]`)
+      setTrace?.({ jsCode: POP_JS, pyCode: POP_PY, activeLine: 1, variables: { popped: top, stackSize: next.length } })
       return next
     })
   }
 
   const peek = () => {
     if (stack.length === 0) { addLog('Stack is empty — nothing to peek'); return }
-    addLog(`Peek → top is ${stack[stack.length - 1]} (stack unchanged)`)
+    const top = stack[stack.length - 1]
+    addLog(`Peek → top is ${top} (stack unchanged)`)
+    setTrace?.({ jsCode: PEEK_JS, pyCode: PEEK_PY, activeLine: 1, variables: { top, stackSize: stack.length } })
   }
 
   const clear = () => {
     setStack([])
     setLog(['Stack cleared'])
+    setTrace?.({ jsCode: CLEAR_JS, pyCode: CLEAR_PY, activeLine: 1, variables: { stackSize: 0 } })
   }
 
   if (view === 'code') return <DsaCodeView blocks={dsaTopics.stack} />

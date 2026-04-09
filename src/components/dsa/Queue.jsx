@@ -3,7 +3,16 @@ import { dsaTopics } from '../../data/dsaTopics'
 import DsaCodeView from './DsaCodeView'
 import './dsa.css'
 
-export default function Queue({ view }) {
+const ENQUEUE_JS = `function enqueue(queue, val) {\n  queue.push(val)       // add to back, O(1)\n}`
+const ENQUEUE_PY = `def enqueue(queue, val):\n    queue.append(val)     # add to back, O(1)`
+const DEQUEUE_JS = `function dequeue(queue) {\n  return queue.shift()  // remove from front, O(n)\n}`
+const DEQUEUE_PY = `def dequeue(queue):\n    return queue.pop(0)   # remove from front, O(n)`
+const PEEK_Q_JS  = `function peek(queue) {\n  return queue[0]       // front element\n}`
+const PEEK_Q_PY  = `def peek(queue):\n    return queue[0]       # front element`
+const CLEAR_Q_JS = `function clear(queue) {\n  queue.length = 0\n}`
+const CLEAR_Q_PY = `def clear(queue):\n    queue.clear()`
+
+export default function Queue({ view, setTrace }) {
   const [queue, setQueue] = useState([1, 5, 9])
   const [inputVal, setInputVal] = useState('')
   const [log, setLog] = useState(['Queue initialized with [1, 5, 9]'])
@@ -15,28 +24,37 @@ export default function Queue({ view }) {
     if (!val) return
     const num = isNaN(val) ? val : Number(val)
     setQueue(prev => {
-      addLog(`Enqueued ${num} → queue is now [${[...prev, num].join(', ')}]`)
-      return [...prev, num]
+      const next = [...prev, num]
+      addLog(`Enqueued ${num} → queue is now [${next.join(', ')}]`)
+      setTrace?.({ jsCode: ENQUEUE_JS, pyCode: ENQUEUE_PY, activeLine: 1, variables: { val: num, queueSize: next.length } })
+      return next
     })
     setInputVal('')
   }
 
   const dequeue = () => {
     if (queue.length === 0) { addLog('Queue is empty — nothing to dequeue'); return }
-    const front = queue[0]
+    const dequeued = queue[0]
     setQueue(prev => {
       const next = prev.slice(1)
-      addLog(`Dequeued ${front} → queue is now [${next.join(', ')}]`)
+      addLog(`Dequeued ${dequeued} → queue is now [${next.join(', ')}]`)
+      setTrace?.({ jsCode: DEQUEUE_JS, pyCode: DEQUEUE_PY, activeLine: 1, variables: { dequeued, queueSize: next.length } })
       return next
     })
   }
 
   const peek = () => {
     if (queue.length === 0) { addLog('Queue is empty — nothing to peek'); return }
-    addLog(`Peek → front is ${queue[0]} (queue unchanged)`)
+    const front = queue[0]
+    addLog(`Peek → front is ${front} (queue unchanged)`)
+    setTrace?.({ jsCode: PEEK_Q_JS, pyCode: PEEK_Q_PY, activeLine: 1, variables: { front, queueSize: queue.length } })
   }
 
-  const clear = () => { setQueue([]); setLog(['Queue cleared']) }
+  const clear = () => {
+    setQueue([])
+    setLog(['Queue cleared'])
+    setTrace?.({ jsCode: CLEAR_Q_JS, pyCode: CLEAR_Q_PY, activeLine: 1, variables: { queueSize: 0 } })
+  }
 
   if (view === 'code') return <DsaCodeView blocks={dsaTopics.queue} />
 
