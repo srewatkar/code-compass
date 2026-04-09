@@ -4,6 +4,7 @@ import Queue from './Queue'
 import LinkedList from './LinkedList'
 import BinaryTree from './BinaryTree'
 import Sorting from './Sorting'
+import TracePanel from '../shared/TracePanel'
 import './DsaPanel.css'
 
 const DS_TABS = [
@@ -25,18 +26,23 @@ const DS_COMPONENTS = {
 export default function DsaPanel() {
   const [activeDs, setActiveDs] = useState('stack')
   const [activeView, setActiveView] = useState('simulate')
+  const [trace, setTrace] = useState({ jsCode: '', pyCode: '', activeLine: null, variables: {} })
 
   const ActiveComponent = DS_COMPONENTS[activeDs]
+
+  const handleDsChange = (id) => {
+    setActiveDs(id)
+    setActiveView('simulate')
+    setTrace({ jsCode: '', pyCode: '', activeLine: null, variables: {} })
+  }
 
   return (
     <div className="dsa-panel">
       <div className="dsa-ds-tabs">
         {DS_TABS.map(tab => (
-          <button
-            type="button"
-            key={tab.id}
+          <button type="button" key={tab.id}
             className={`dsa-ds-tab${activeDs === tab.id ? ' active' : ''}`}
-            onClick={() => { setActiveDs(tab.id); setActiveView('simulate') }}
+            onClick={() => handleDsChange(tab.id)}
           >
             {tab.label}
           </button>
@@ -44,24 +50,30 @@ export default function DsaPanel() {
       </div>
 
       <div className="dsa-view-tabs">
-        <button
-          type="button"
+        <button type="button"
           className={`dsa-view-tab${activeView === 'simulate' ? ' active' : ''}`}
           onClick={() => setActiveView('simulate')}
-        >
-          Simulate
-        </button>
-        <button
-          type="button"
+        >Simulate</button>
+        <button type="button"
           className={`dsa-view-tab${activeView === 'code' ? ' active' : ''}`}
           onClick={() => setActiveView('code')}
-        >
-          Code
-        </button>
+        >Code</button>
       </div>
 
-      <div className="dsa-content">
-        <ActiveComponent view={activeView} />
+      <div className="dsa-content" style={activeView === 'simulate' ? { display: 'flex', gap: 16, padding: 24 } : {}}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <ActiveComponent view={activeView} setTrace={activeView === 'simulate' ? setTrace : undefined} />
+        </div>
+        {activeView === 'simulate' && trace.jsCode && (
+          <div style={{ width: 300, flexShrink: 0 }}>
+            <TracePanel
+              jsCode={trace.jsCode}
+              pyCode={trace.pyCode}
+              currentLine={trace.activeLine}
+              variables={trace.variables}
+            />
+          </div>
+        )}
       </div>
     </div>
   )
