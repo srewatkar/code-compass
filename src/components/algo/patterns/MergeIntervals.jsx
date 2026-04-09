@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'other')
+const pattern  = category.patterns.find(p => p.id === 'merge-intervals')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 export function generateSteps() {
   const intervals = [[1, 4], [2, 6], [8, 10], [15, 18]]
@@ -11,6 +19,8 @@ export function generateSteps() {
     visual: { intervals, sorted: [...intervals], merged: [], currentIdx: -1, phase: 'init' },
     msg: `Init: show all 4 intervals on timeline`,
     log: [...log],
+    currentLine: 0,
+    variables: { current: null, last: null },
   })
 
   // Sort step (already sorted)
@@ -20,6 +30,8 @@ export function generateSteps() {
     visual: { intervals, sorted, merged: [], currentIdx: -1, phase: 'sort' },
     msg: `Sorted: [1,4],[2,6],[8,10],[15,18] (already sorted)`,
     log: [...log],
+    currentLine: 2,
+    variables: { current: null, last: null },
   })
 
   const merged = []
@@ -33,6 +45,8 @@ export function generateSteps() {
         visual: { intervals, sorted, merged: merged.map(m => [...m]), currentIdx: i, phase: 'merge' },
         msg: `Take [${cur[0]},${cur[1]}]: result=[[${cur[0]},${cur[1]}]]`,
         log: [...log],
+        currentLine: 3,
+        variables: { current: [...cur], last: null },
       })
     } else {
       const last = merged[merged.length - 1]
@@ -45,6 +59,8 @@ export function generateSteps() {
           visual: { intervals, sorted, merged: merged.map(m => [...m]), currentIdx: i, phase: 'merge' },
           msg: `[${cur[0]},${cur[1]}] overlaps [${last[0]},${originalEnd}] (${cur[0]}<=${originalEnd}): merge → [${last[0]},${newEnd}]`,
           log: [...log],
+          currentLine: 9,
+          variables: { current: [...cur], last: [...last] },
         })
       } else {
         log.unshift(`[${cur}] does not overlap [${last}] (${cur[0]}>${last[1]}): add → result has ${merged.length + 1} intervals`)
@@ -53,6 +69,8 @@ export function generateSteps() {
           visual: { intervals, sorted, merged: merged.map(m => [...m]), currentIdx: i, phase: 'merge' },
           msg: `[${cur[0]},${cur[1]}] does not overlap [${last[0]},${last[1]}] (${cur[0]}>${last[1]}): add → result=[[${merged.map(m => `[${m}]`).join(',')}]]`,
           log: [...log],
+          currentLine: 11,
+          variables: { current: [...cur], last: [...last] },
         })
       }
     }
@@ -63,6 +81,8 @@ export function generateSteps() {
     visual: { intervals, sorted, merged: merged.map(m => [...m]), currentIdx: -1, phase: 'done' },
     msg: `Done! Merged to ${merged.length} intervals: [[1,6],[8,10],[15,18]]`,
     log: [...log],
+    currentLine: null,
+    variables: { current: null, last: null },
   })
 
   return steps
@@ -165,5 +185,11 @@ function MergeIntervalsVisual({ step }) {
 
 export default function MergeIntervals() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <MergeIntervalsVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <MergeIntervalsVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'arrays')
+const pattern  = category.patterns.find(p => p.id === 'fast-slow-pointers')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 export function generateSteps() {
   // Nodes: 1→2→3→4→5→(back to 3, index 2)
@@ -16,6 +24,8 @@ export function generateSteps() {
     visual: { nodeVals, nextIdx, slow, fast, met: false, cycleAt: 2 },
     msg: 'slow=node 1, fast=node 1',
     log: [...log],
+    currentLine: 8,
+    variables: { slow, fast },
   })
 
   for (let iter = 0; iter < 8; iter++) {
@@ -29,6 +39,8 @@ export function generateSteps() {
       visual: { nodeVals, nextIdx, slow, fast, met, cycleAt: 2 },
       msg: met ? `slow and fast both at node ${nodeVals[slow]} — cycle detected!` : `slow=node ${nodeVals[slow]}, fast=node ${nodeVals[fast]}`,
       log: [...log],
+      currentLine: met ? 14 : 12,
+      variables: { slow, fast },
     })
     if (met) break
   }
@@ -83,5 +95,11 @@ function FastSlowVisual({ step }) {
 
 export default function FastSlowPointers() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <FastSlowVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <FastSlowVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

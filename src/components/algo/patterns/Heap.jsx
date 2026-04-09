@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'other')
+const pattern  = category.patterns.find(p => p.id === 'heap')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 // Simple min-heap operations on a sorted array (ascending)
 function heapPush(heap, val) {
@@ -25,6 +33,8 @@ export function generateSteps() {
     visual: { arr, heap: [], currentI: -1, action: 'init', k },
     msg: `Find ${k} largest in [${arr.join(',')}] using min-heap of size k=${k}`,
     log: [...log],
+    currentLine: 10,
+    variables: { i: -1, val: null, heap: [] },
   })
 
   for (let i = 0; i < arr.length; i++) {
@@ -37,6 +47,8 @@ export function generateSteps() {
         visual: { arr, heap: [...heap], currentI: i, action: 'push', k },
         msg: `Push ${val}: heap=[${heap.join(',')}], size=${heap.length}${heap.length === k ? '=k (heap full)' : '<k'}`,
         log: [...log],
+        currentLine: 12,
+        variables: { i, val, heap: [...heap] },
       })
     } else {
       const heapMin = heap[0]
@@ -48,6 +60,8 @@ export function generateSteps() {
           visual: { arr, heap: [...heap], currentI: i, action: 'replace', k },
           msg: `${val} > heap min (${heapMin}) → pop ${heapMin}, push ${val} → heap=[${heap.join(',')}]`,
           log: [...log],
+          currentLine: 14,
+          variables: { i, val, heap: [...heap] },
         })
       } else {
         log.unshift(`${val} <= heap min (${heapMin}) → skip`)
@@ -55,6 +69,8 @@ export function generateSteps() {
           visual: { arr, heap: [...heap], currentI: i, action: 'skip', k },
           msg: `${val} <= heap min (${heapMin}) → skip`,
           log: [...log],
+          currentLine: 12,
+          variables: { i, val, heap: [...heap] },
         })
       }
     }
@@ -65,6 +81,8 @@ export function generateSteps() {
     visual: { arr, heap: [...heap], currentI: -1, action: 'done', k },
     msg: `Done! K largest elements: [${heap.join(',')}]`,
     log: [...log],
+    currentLine: 17,
+    variables: { i: -1, val: null, heap: [...heap] },
   })
 
   return steps
@@ -157,5 +175,11 @@ function HeapVisual({ step }) {
 
 export default function Heap() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <HeapVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <HeapVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

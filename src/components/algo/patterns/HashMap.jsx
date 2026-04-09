@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'other')
+const pattern  = category.patterns.find(p => p.id === 'hashmap')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 export function generateSteps() {
   const arr = [2, 7, 11, 15]
@@ -13,6 +21,8 @@ export function generateSteps() {
     visual: { arr, map: { ...map }, currentI: -1, foundPair: null, target },
     msg: `Scanning arr=[${arr.join(',')}], target=${target}`,
     log: [...log],
+    currentLine: 1,
+    variables: { i: -1, val: null, map: {} },
   })
 
   for (let i = 0; i < arr.length; i++) {
@@ -25,12 +35,16 @@ export function generateSteps() {
         visual: { arr, map: { ...map }, currentI: i, foundPair: [map[complement], i], target },
         msg: `i=${i}, val=${val}: complement=${complement} found in map at index ${map[complement]} → return [${map[complement]},${i}]`,
         log: [...log],
+        currentLine: 5,
+        variables: { i, val, map: { ...map } },
       })
       log.unshift(`Done! Found pair: arr[${map[complement]}]+arr[${i}]=${arr[map[complement]]}+${val}=${target}`)
       steps.push({
         visual: { arr, map: { ...map }, currentI: -1, foundPair: [map[complement], i], target, done: true },
         msg: `Done! Found pair: arr[${map[complement]}]+arr[${i}]=${arr[map[complement]]}+${val}=${target}`,
         log: [...log],
+        currentLine: 6,
+        variables: { i, val, map: { ...map } },
       })
       return steps
     }
@@ -41,6 +55,8 @@ export function generateSteps() {
       visual: { arr, map: { ...map }, currentI: i, foundPair: null, target },
       msg: `i=${i}, val=${val}: complement=${complement} not in map → add {${val}:${i}}`,
       log: [...log],
+      currentLine: 8,
+      variables: { i, val, map: { ...map } },
     })
   }
 
@@ -111,5 +127,11 @@ function HashMapVisual({ step }) {
 
 export default function HashMap() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <HashMapVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <HashMapVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

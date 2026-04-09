@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'dp')
+const pattern  = category.patterns.find(p => p.id === 'dp-1d-memo')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 export function generateSteps() {
   const N = 6
@@ -16,6 +24,8 @@ export function generateSteps() {
           visual: { n: N, cache: { ...cache }, currentCall: n, result: null },
           msg: `fib(${n}) = ${n} (base case)`,
           log: [...log],
+          currentLine: 1,
+          variables: { n, result: n },
         })
       }
       return cache[n]
@@ -26,6 +36,8 @@ export function generateSteps() {
         visual: { n: N, cache: { ...cache }, currentCall: n, cacheHit: true, result: cache[n] },
         msg: `fib(${n}) — cache hit! = ${cache[n]}`,
         log: [...log],
+        currentLine: 2,
+        variables: { n, result: cache[n] },
       })
       return cache[n]
     }
@@ -34,6 +46,8 @@ export function generateSteps() {
       visual: { n: N, cache: { ...cache }, currentCall: n, result: null },
       msg: `fib(${n}) — compute fib(${n-1}) + fib(${n-2})`,
       log: [...log],
+      currentLine: 3,
+      variables: { n, result: null },
     })
     const val = fib(n - 1) + fib(n - 2)
     cache[n] = val
@@ -42,6 +56,8 @@ export function generateSteps() {
       visual: { n: N, cache: { ...cache }, currentCall: n, result: val },
       msg: `fib(${n}) = ${val} — cached`,
       log: [...log],
+      currentLine: 4,
+      variables: { n, result: val },
     })
     return val
   }
@@ -51,6 +67,8 @@ export function generateSteps() {
     visual: { n: N, cache: {}, currentCall: null, result: null },
     msg: `Compute fib(${N}) — cache starts empty`,
     log: [...log],
+    currentLine: 0,
+    variables: { n: N, result: null },
   })
 
   const answer = fib(N)
@@ -59,6 +77,8 @@ export function generateSteps() {
     visual: { n: N, cache: { ...cache }, currentCall: null, result: answer, done: true },
     msg: `fib(${N}) = ${answer}`,
     log: [...log],
+    currentLine: null,
+    variables: { n: N, result: answer },
   })
 
   return steps
@@ -116,5 +136,11 @@ function DP1DMemoVisual({ step }) {
 
 export default function DP1DMemo() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <DP1DMemoVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <DP1DMemoVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

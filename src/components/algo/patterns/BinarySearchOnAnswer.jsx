@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'binarysearch')
+const pattern  = category.patterns.find(p => p.id === 'binary-search-on-answer')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 const WEIGHTS = [1, 2, 3, 4, 5]
 const D = 3
@@ -24,6 +32,8 @@ export function generateSteps() {
     visual: { lo, hi, mid: -1, checkResult: null, answer: null },
     msg: `lo=${lo} (must carry max), hi=${hi} (all in one day)`,
     log: [...log],
+    currentLine: 1,
+    variables: { lo, mid: null, hi },
   })
 
   while (lo < hi) {
@@ -34,6 +44,8 @@ export function generateSteps() {
       visual: { lo, hi, mid, checkResult: ok, answer: null },
       msg: `check(${mid}): ${ok ? `✓ works → hi=${mid}` : `✗ fails → lo=${mid+1}`}`,
       log: [...log],
+      currentLine: 14,
+      variables: { lo, mid, hi },
     })
     if (ok) hi = mid
     else lo = mid + 1
@@ -44,6 +56,8 @@ export function generateSteps() {
     visual: { lo, hi: lo, mid: -1, checkResult: null, answer: lo },
     msg: `Answer: minimum capacity = ${lo}`,
     log: [...log],
+    currentLine: 19,
+    variables: { lo, mid: null, hi: lo },
   })
 
   return steps
@@ -97,5 +111,11 @@ function BSOnAnswerVisual({ step }) {
 
 export default function BinarySearchOnAnswer() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <BSOnAnswerVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <BSOnAnswerVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

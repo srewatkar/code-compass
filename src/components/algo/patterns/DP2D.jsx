@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'dp')
+const pattern  = category.patterns.find(p => p.id === 'dp-2d')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 export function generateSteps() {
   const s1 = 'ABCD', s2 = 'ACD'
@@ -14,6 +22,8 @@ export function generateSteps() {
     visual: { s1, s2, dp: dp.map(r => [...r]), currentI: 0, currentJ: 0 },
     msg: 'Initialize: row 0 and column 0 = 0',
     log: [...log],
+    currentLine: 3,
+    variables: { i: 0, j: 0 },
   })
 
   for (let i = 1; i <= m; i++) {
@@ -29,6 +39,8 @@ export function generateSteps() {
         visual: { s1, s2, dp: dp.map(r => [...r]), currentI: i, currentJ: j },
         msg: `dp[${i}][${j}] = ${dp[i][j]} — s1[${i-1}]='${s1[i-1]}', s2[${j-1}]='${s2[j-1]}'`,
         log: [...log],
+        currentLine: s1[i - 1] === s2[j - 1] ? 7 : 9,
+        variables: { i, j },
       })
     }
   }
@@ -38,6 +50,8 @@ export function generateSteps() {
     visual: { s1, s2, dp: dp.map(r => [...r]), currentI: -1, currentJ: -1, done: true, answer: dp[m][n] },
     msg: `LCS length = ${dp[m][n]}`,
     log: [...log],
+    currentLine: 12,
+    variables: { i: m, j: n },
   })
 
   return steps
@@ -106,5 +120,11 @@ function DP2DVisual({ step }) {
 
 export default function DP2D() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <DP2DVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <DP2DVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

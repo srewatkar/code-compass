@@ -45,6 +45,12 @@ describe('TwoPointers steps', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.found).toBe(true)
   })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
+  })
 })
 
 describe('FastSlowPointers steps', () => {
@@ -53,6 +59,12 @@ describe('FastSlowPointers steps', () => {
   it('last step detects cycle (slow === fast)', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.met).toBe(true)
+  })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
   })
 })
 
@@ -63,6 +75,12 @@ describe('PrefixSum steps', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.queryResult).toBe(19)
   })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
+  })
 })
 
 describe('MonotonicStack steps', () => {
@@ -71,5 +89,11 @@ describe('MonotonicStack steps', () => {
   it('final result is [5,5,6,6,-1,-1]', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.result).toEqual([5, 5, 6, 6, -1, -1])
+  })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
   })
 })

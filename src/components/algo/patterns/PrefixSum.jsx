@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'arrays')
+const pattern  = category.patterns.find(p => p.id === 'prefix-sum')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 export function generateSteps() {
   const arr = [3, 1, 4, 1, 5, 9, 2, 6]
@@ -13,6 +21,8 @@ export function generateSteps() {
     visual: { arr, prefix: [...prefix], building: true, currentI: -1, queryL, queryR, queryResult: null },
     msg: 'prefix[0] = 0',
     log: [...log],
+    currentLine: 1,
+    variables: { i: -1, prefix: [...prefix] },
   })
 
   for (let i = 0; i < arr.length; i++) {
@@ -22,6 +32,8 @@ export function generateSteps() {
       visual: { arr, prefix: [...prefix], building: true, currentI: i, queryL, queryR, queryResult: null },
       msg: `prefix[${i+1}] = ${prefix[i+1]}`,
       log: [...log],
+      currentLine: 3,
+      variables: { i, prefix: [...prefix] },
     })
   }
 
@@ -31,6 +43,8 @@ export function generateSteps() {
     visual: { arr, prefix: [...prefix], building: false, currentI: -1, queryL, queryR, queryResult: result },
     msg: `range sum [${queryL},${queryR}] = ${result}`,
     log: [...log],
+    currentLine: 9,
+    variables: { i: -1, prefix: [...prefix] },
   })
 
   return steps
@@ -93,5 +107,11 @@ function PrefixSumVisual({ step }) {
 
 export default function PrefixSum() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <PrefixSumVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <PrefixSumVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

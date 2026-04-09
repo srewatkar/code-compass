@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'arrays')
+const pattern  = category.patterns.find(p => p.id === 'monotonic-stack')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 export function generateSteps() {
   const arr = [2, 1, 5, 3, 6, 4]
@@ -13,6 +21,8 @@ export function generateSteps() {
     visual: { arr, stack: [...stack], result: [...result], currentI: -1 },
     msg: 'Start — empty stack, all results = -1',
     log: [...log],
+    currentLine: 1,
+    variables: { i: -1, val: null, stack: [] },
   })
 
   for (let i = 0; i < arr.length; i++) {
@@ -24,6 +34,8 @@ export function generateSteps() {
         visual: { arr, stack: [...stack], result: [...result], currentI: i, justPopped: popped },
         msg: `Pop index ${popped} — next greater for ${arr[popped]} is ${arr[i]}`,
         log: [...log],
+        currentLine: 5,
+        variables: { i, val: arr[i], stack: stack.map(s => arr[s]) },
       })
     }
     stack.push(i)
@@ -32,6 +44,8 @@ export function generateSteps() {
       visual: { arr, stack: [...stack], result: [...result], currentI: i },
       msg: `Push ${arr[i]} — stack = [${stack.map(s => arr[s]).join(', ')}]`,
       log: [...log],
+      currentLine: 8,
+      variables: { i, val: arr[i], stack: stack.map(s => arr[s]) },
     })
   }
 
@@ -40,6 +54,8 @@ export function generateSteps() {
     visual: { arr, stack: [], result: [...result], currentI: -1, done: true },
     msg: `result = [${result.join(', ')}]`,
     log: [...log],
+    currentLine: 10,
+    variables: { i: -1, val: null, stack: [] },
   })
 
   return steps
@@ -107,5 +123,11 @@ function MonotonicStackVisual({ step }) {
 
 export default function MonotonicStack() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <MonotonicStackVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <MonotonicStackVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'trees')
+const pattern  = category.patterns.find(p => p.id === 'backtracking')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 export function generateSteps() {
   const nums = [1, 2, 3]
@@ -12,6 +20,8 @@ export function generateSteps() {
     visual: { current: [], remaining: [...nums], results: [] },
     msg: 'Start — nothing chosen yet',
     log: [...log],
+    currentLine: 2,
+    variables: { path: [], results: [] },
   })
 
   function backtrack(current, remaining) {
@@ -22,6 +32,8 @@ export function generateSteps() {
         visual: { current: [...current], remaining: [], results: results.map(r => [...r]) },
         msg: `Found: [${current.join(', ')}]`,
         log: [...log],
+        currentLine: 3,
+        variables: { path: [...current], results: results.map(r => [...r]) },
       })
       return
     }
@@ -34,6 +46,8 @@ export function generateSteps() {
         visual: { current: [...current], remaining: nextRemaining, results: results.map(r => [...r]) },
         msg: `Choose ${chosen} — path so far: [${current.join(', ')}]`,
         log: [...log],
+        currentLine: 8,
+        variables: { path: [...current], results: results.map(r => [...r]) },
       })
       backtrack(current, nextRemaining)
       current.pop()
@@ -42,6 +56,8 @@ export function generateSteps() {
         visual: { current: [...current], remaining, results: results.map(r => [...r]) },
         msg: `Backtrack — unchoose ${chosen}`,
         log: [...log],
+        currentLine: 10,
+        variables: { path: [...current], results: results.map(r => [...r]) },
       })
     }
   }
@@ -53,6 +69,8 @@ export function generateSteps() {
     visual: { current: [], remaining: [], results: results.map(r => [...r]), done: true },
     msg: `All ${results.length} permutations found`,
     log: [...log],
+    currentLine: 13,
+    variables: { path: [], results: results.map(r => [...r]) },
   })
 
   return steps
@@ -108,5 +126,11 @@ function BacktrackingVisual({ step }) {
 
 export default function Backtracking() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <BacktrackingVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <BacktrackingVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

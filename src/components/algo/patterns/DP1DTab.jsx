@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'dp')
+const pattern  = category.patterns.find(p => p.id === 'dp-1d-tab')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 export function generateSteps() {
   const N = 6
@@ -14,6 +22,8 @@ export function generateSteps() {
     visual: { dp: [...dp], currentI: 1, N },
     msg: 'dp[0]=1, dp[1]=1 (base cases)',
     log: [...log],
+    currentLine: 2,
+    variables: { i: 1, dp: [...dp] },
   })
 
   for (let i = 2; i <= N; i++) {
@@ -23,6 +33,8 @@ export function generateSteps() {
       visual: { dp: [...dp], currentI: i, N },
       msg: `dp[${i}] = dp[${i-1}] + dp[${i-2}] = ${dp[i]}`,
       log: [...log],
+      currentLine: 6,
+      variables: { i, dp: [...dp] },
     })
   }
 
@@ -31,6 +43,8 @@ export function generateSteps() {
     visual: { dp: [...dp], currentI: -1, N, done: true },
     msg: `Ways to climb ${N} stairs = ${dp[N]}`,
     log: [...log],
+    currentLine: 8,
+    variables: { i: N, dp: [...dp] },
   })
 
   return steps
@@ -85,5 +99,11 @@ function DP1DTabVisual({ step }) {
 
 export default function DP1DTab() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <DP1DTabVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <DP1DTabVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

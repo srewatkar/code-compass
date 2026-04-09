@@ -21,6 +21,12 @@ describe('BFSTemplate steps', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.found).toBe(true)
   })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
+  })
 })
 
 describe('DFSTemplate steps', () => {
@@ -30,6 +36,12 @@ describe('DFSTemplate steps', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.found).toBe(true)
   })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
+  })
 })
 
 describe('Backtracking steps', () => {
@@ -38,6 +50,12 @@ describe('Backtracking steps', () => {
   it('final step has 6 permutations', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.results.length).toBe(6)
+  })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
   })
 })
 
@@ -51,5 +69,11 @@ describe('TopologicalSort steps', () => {
   it('E is last in result', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.result[last.visual.result.length - 1]).toBe('E')
+  })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
   })
 })

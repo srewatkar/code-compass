@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'trees')
+const pattern  = category.patterns.find(p => p.id === 'dfs')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 // Tree: node id → children ids
 const TREE = { 1: [2, 3], 2: [4, 5], 3: [6], 4: [], 5: [], 6: [] }
@@ -16,6 +24,8 @@ export function generateSteps() {
     visual: { visited: new Set(), current: null, found: false, stack: [1] },
     msg: 'Start DFS — stack = [1]',
     log: [...log],
+    currentLine: 2,
+    variables: { node: null, found: false },
   })
 
   const stack = [1]
@@ -31,6 +41,8 @@ export function generateSteps() {
         visual: { visited: new Set(visited), current: node, found: true, stack: [...stack] },
         msg: `Found node ${TARGET}! Path exists.`,
         log: [...log],
+        currentLine: 7,
+        variables: { node, found: true },
       })
       break
     }
@@ -43,6 +55,8 @@ export function generateSteps() {
       visual: { visited: new Set(visited), current: node, found: false, stack: [...stack] },
       msg: `Visit node ${node} → explore children [${children.join(', ')}]`,
       log: [...log],
+      currentLine: 4,
+      variables: { node, found: false },
     })
   }
 
@@ -52,6 +66,8 @@ export function generateSteps() {
       visual: { visited: new Set(visited), current: null, found: false, stack: [] },
       msg: 'Node not found',
       log: [...log],
+      currentLine: null,
+      variables: { node: null, found: false },
     })
   }
   return steps
@@ -102,5 +118,11 @@ function DFSVisual({ step }) {
 
 export default function DFSTemplate() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <DFSVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <DFSVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

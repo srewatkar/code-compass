@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'binarysearch')
+const pattern  = category.patterns.find(p => p.id === 'binary-search')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 export function generateSteps() {
   const arr = [1, 3, 5, 7, 9, 11, 13, 15]
@@ -13,6 +21,8 @@ export function generateSteps() {
     visual: { arr, lo, hi, mid: -1, target, found: false, foundIdx: -1 },
     msg: `lo=0, hi=${arr.length-1} — searching for ${target}`,
     log: [...log],
+    currentLine: 1,
+    variables: { lo, mid: null, hi, target },
   })
 
   while (lo <= hi) {
@@ -23,6 +33,8 @@ export function generateSteps() {
         visual: { arr, lo, hi, mid, target, found: true, foundIdx: mid },
         msg: `arr[${mid}] = ${target} — found at index ${mid}!`,
         log: [...log],
+        currentLine: 6,
+        variables: { lo, mid, hi, target },
       })
       break
     } else if (arr[mid] < target) {
@@ -31,6 +43,8 @@ export function generateSteps() {
         visual: { arr, lo, hi, mid, target, found: false, foundIdx: -1 },
         msg: `arr[${mid}]=${arr[mid]} < ${target} → move lo right`,
         log: [...log],
+        currentLine: 7,
+        variables: { lo, mid, hi, target },
       })
       lo = mid + 1
     } else {
@@ -39,6 +53,8 @@ export function generateSteps() {
         visual: { arr, lo, hi, mid, target, found: false, foundIdx: -1 },
         msg: `arr[${mid}]=${arr[mid]} > ${target} → move hi left`,
         log: [...log],
+        currentLine: 8,
+        variables: { lo, mid, hi, target },
       })
       hi = mid - 1
     }
@@ -88,5 +104,11 @@ function BinarySearchVisual({ step }) {
 
 export default function BinarySearch() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <BinarySearchVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <BinarySearchVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

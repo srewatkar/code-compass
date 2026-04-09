@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'arrays')
+const pattern  = category.patterns.find(p => p.id === 'two-pointers')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 export function generateSteps() {
   const arr = [1, 3, 4, 6, 8, 9]
@@ -14,6 +22,8 @@ export function generateSteps() {
     visual: { arr, left, right, target, found: false },
     msg: `left=${left} (${arr[left]}), right=${right} (${arr[right]})`,
     log: [...log],
+    currentLine: 1,
+    variables: { left, right, sum: null },
   })
 
   while (left < right) {
@@ -24,6 +34,8 @@ export function generateSteps() {
         visual: { arr, left, right, target, found: true },
         msg: `Found! arr[${left}] + arr[${right}] = ${target}`,
         log: [...log],
+        currentLine: 6,
+        variables: { left, right, sum },
       })
       break
     } else if (sum < target) {
@@ -32,6 +44,8 @@ export function generateSteps() {
         visual: { arr, left, right, target, found: false, sum },
         msg: `sum ${sum} < ${target} → move left →`,
         log: [...log],
+        currentLine: 7,
+        variables: { left, right, sum },
       })
       left++
     } else {
@@ -40,6 +54,8 @@ export function generateSteps() {
         visual: { arr, left, right, target, found: false, sum },
         msg: `sum ${sum} > ${target} → move right ←`,
         log: [...log],
+        currentLine: 8,
+        variables: { left, right, sum },
       })
       right--
     }
@@ -89,5 +105,11 @@ function TwoPointersVisual({ step }) {
 
 export default function TwoPointers() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <TwoPointersVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <TwoPointersVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

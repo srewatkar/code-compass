@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'trees')
+const pattern  = category.patterns.find(p => p.id === 'topological-sort')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 const NODES = ['A','B','C','D','E']
 const EDGES = [['A','C'],['B','C'],['B','D'],['C','E'],['D','E']]
@@ -24,6 +32,8 @@ export function generateSteps() {
     visual: { deg: { ...deg }, queue: [...queue], result: [], processedNode: null },
     msg: `Queue = [${queue.join(', ')}] — nodes with in-degree 0`,
     log: [...log],
+    currentLine: 7,
+    variables: { node: null, order: [] },
   })
 
   while (queue.length > 0) {
@@ -45,6 +55,8 @@ export function generateSteps() {
       visual: { deg: { ...deg }, queue: [...queue], result: [...result], processedNode: node },
       msg: `Processed ${node} — result: [${result.join(', ')}]`,
       log: [...log],
+      currentLine: 13,
+      variables: { node, order: [...result] },
     })
   }
 
@@ -53,6 +65,8 @@ export function generateSteps() {
     visual: { deg: { ...deg }, queue: [], result: [...result], processedNode: null, done: true },
     msg: `Order: ${result.join(' → ')}`,
     log: [...log],
+    currentLine: null,
+    variables: { node: null, order: [...result] },
   })
 
   return steps
@@ -111,5 +125,11 @@ function TopoSortVisual({ step }) {
 
 export default function TopologicalSort() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <TopoSortVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <TopoSortVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

@@ -26,6 +26,12 @@ describe('BinarySearch steps', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.foundIdx).toBe(6)
   })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
+  })
 })
 
 describe('BinarySearchOnAnswer steps', () => {
@@ -34,6 +40,12 @@ describe('BinarySearchOnAnswer steps', () => {
   it('answer is 6', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.answer).toBe(6)
+  })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
   })
 })
 
@@ -44,6 +56,12 @@ describe('DP1DMemo steps', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.result).toBe(8)
   })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
+  })
 })
 
 describe('DP1DTab steps', () => {
@@ -53,6 +71,12 @@ describe('DP1DTab steps', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.dp[6]).toBe(13)
   })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
+  })
 })
 
 describe('DP2D steps', () => {
@@ -61,5 +85,11 @@ describe('DP2D steps', () => {
   it('LCS("ABCD","ACD") = 3', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.answer).toBe(3)
+  })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
   })
 })

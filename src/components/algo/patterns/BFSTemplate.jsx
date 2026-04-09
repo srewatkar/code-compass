@@ -1,5 +1,13 @@
 import { useMemo } from 'react'
 import PatternSimulator from '../PatternSimulator'
+import { algoPatterns } from '../../../data/algoPatterns'
+
+const category = algoPatterns.find(c => c.id === 'trees')
+const pattern  = category.patterns.find(p => p.id === 'bfs')
+const TRACE_CODE = {
+  js:     pattern.codeBlocks[0].js,
+  python: pattern.codeBlocks[0].python,
+}
 
 export function generateSteps() {
   const grid = [
@@ -20,6 +28,8 @@ export function generateSteps() {
     visual: { grid, dist: dist.map(r => [...r]), current: null, found: false },
     msg: 'Start at (0,0)',
     log: [...log],
+    currentLine: 7,
+    variables: { level: 0, queueSize: 1 },
   })
 
   const dirs = [[-1,0],[1,0],[0,-1],[0,1]]
@@ -31,6 +41,8 @@ export function generateSteps() {
         visual: { grid, dist: dist.map(row => [...row]), current: [r, c], found: true },
         msg: `Reached (3,3) — distance = ${dist[3][3]}`,
         log: [...log],
+        currentLine: 12,
+        variables: { level: dist[3][3], queueSize: queue.length },
       })
       break
     }
@@ -44,6 +56,8 @@ export function generateSteps() {
           visual: { grid, dist: dist.map(row => [...row]), current: [nr, nc], found: false },
           msg: `Visit (${nr},${nc}) — distance ${dist[nr][nc]}`,
           log: [...log],
+          currentLine: 20,
+          variables: { level: dist[nr][nc], queueSize: queue.length },
         })
       }
     }
@@ -93,5 +107,11 @@ function BFSVisual({ step }) {
 
 export default function BFSTemplate() {
   const steps = useMemo(() => generateSteps(), [])
-  return <PatternSimulator steps={steps} renderStep={(step) => <BFSVisual step={step} />} />
+  return (
+    <PatternSimulator
+      steps={steps}
+      renderStep={(step) => <BFSVisual step={step} />}
+      traceCode={TRACE_CODE}
+    />
+  )
 }

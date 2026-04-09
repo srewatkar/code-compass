@@ -44,6 +44,12 @@ describe('HashMap steps', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.foundPair).toEqual([0, 1])
   })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
+  })
 })
 
 describe('MergeIntervals steps', () => {
@@ -76,6 +82,12 @@ describe('MergeIntervals steps', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.merged).toEqual([[1, 6], [8, 10], [15, 18]])
   })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
+  })
 })
 
 describe('Heap steps', () => {
@@ -107,5 +119,11 @@ describe('Heap steps', () => {
   it('last step heap contains k=3 largest elements [5,6,9]', () => {
     const last = steps[steps.length - 1]
     expect(last.visual.heap).toEqual([5, 6, 9])
+  })
+  it('each step has currentLine (number or null) and variables (object)', () => {
+    steps.forEach(step => {
+      expect(step.currentLine === null || typeof step.currentLine === 'number').toBe(true)
+      expect(typeof step.variables).toBe('object')
+    })
   })
 })
