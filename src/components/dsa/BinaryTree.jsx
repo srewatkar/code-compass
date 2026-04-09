@@ -3,6 +3,12 @@ import { dsaTopics } from '../../data/dsaTopics'
 import DsaCodeView from './DsaCodeView'
 import './dsa.css'
 
+const INSERT_JS = `function insert(root, val) {\n  if (!root) return new Node(val)\n  if (val < root.val) root.left  = insert(root.left,  val)\n  else               root.right = insert(root.right, val)\n  return root\n}`
+const INSERT_PY = `def insert(root, val):\n    if not root: return Node(val)\n    if val < root.val: root.left  = insert(root.left,  val)\n    else:              root.right = insert(root.right, val)\n    return root`
+
+const SEARCH_JS = `function search(root, val) {\n  if (!root || root.val === val) return root\n  if (val < root.val) return search(root.left,  val)\n  return search(root.right, val)\n}`
+const SEARCH_PY = `def search(root, val):\n    if not root or root.val == val: return root\n    if val < root.val: return search(root.left,  val)\n    return search(root.right, val)`
+
 function insertBST(node, val) {
   if (!node) return { value: val, left: null, right: null }
   if (val < node.value) return { ...node, left: insertBST(node.left, val) }
@@ -68,7 +74,7 @@ function treeHeight(node) {
   return 1 + Math.max(treeHeight(node.left), treeHeight(node.right))
 }
 
-export default function BinaryTree({ view }) {
+export default function BinaryTree({ view, setTrace }) {
   const buildInitial = () => {
     let t = null
     for (const v of [5, 3, 8, 1, 4]) t = insertBST(t, v)
@@ -92,6 +98,8 @@ export default function BinaryTree({ view }) {
         addLog(`${val} already exists — duplicates are ignored`)
       } else {
         addLog(`Inserted ${val} into the BST`)
+        const countNodes = (node) => node ? 1 + countNodes(node.left) + countNodes(node.right) : 0
+        setTrace?.({ jsCode: INSERT_JS, pyCode: INSERT_PY, activeLine: 2, variables: { inserted: val, size: countNodes(newTree) } })
       }
       return newTree
     })
@@ -110,6 +118,7 @@ export default function BinaryTree({ view }) {
       ? `Found ${val}! Path: ${path.join(' → ')}`
       : `${val} not found. Searched: ${path.join(' → ')} → null`
     )
+    setTrace?.({ jsCode: SEARCH_JS, pyCode: SEARCH_PY, activeLine: 1, variables: { target: val, found } })
     setInputVal('')
     setTimeout(() => setHighlighted([]), 2000)
   }

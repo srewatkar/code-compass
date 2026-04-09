@@ -3,7 +3,16 @@ import { dsaTopics } from '../../data/dsaTopics'
 import DsaCodeView from './DsaCodeView'
 import './dsa.css'
 
-export default function LinkedList({ view }) {
+const APPEND_JS = `function append(list, val) {\n  const node = { val, next: null }\n  if (!list.head) { list.head = node; return }\n  let curr = list.head\n  while (curr.next) curr = curr.next\n  curr.next = node   // link to tail\n}`
+const APPEND_PY = `def append(self, val):\n    node = Node(val)\n    if not self.head:\n        self.head = node; return\n    curr = self.head\n    while curr.next: curr = curr.next\n    curr.next = node   # link to tail`
+
+const PREPEND_JS = `function prepend(list, val) {\n  list.head = { val, next: list.head }  // new head\n}`
+const PREPEND_PY = `def prepend(self, val):\n    self.head = Node(val, self.head)  # new head`
+
+const DELETE_JS = `function deleteNode(list, val) {\n  if (list.head?.val === val) { list.head = list.head.next; return }\n  let curr = list.head\n  while (curr.next && curr.next.val !== val) curr = curr.next\n  if (curr.next) curr.next = curr.next.next  // skip node\n}`
+const DELETE_PY = `def delete(self, val):\n    if self.head and self.head.val == val:\n        self.head = self.head.next; return\n    curr = self.head\n    while curr.next and curr.next.val != val: curr = curr.next\n    if curr.next: curr.next = curr.next.next  # skip node`
+
+export default function LinkedList({ view, setTrace }) {
   const [list, setList] = useState([4, 2, 8])
   const [inputVal, setInputVal] = useState('')
   const [log, setLog] = useState(['List initialized with 4 → 2 → 8'])
@@ -18,8 +27,10 @@ export default function LinkedList({ view }) {
     if (!val) return
     const num = parse(val)
     setList(prev => {
-      addLog(`Appended ${num} → list is now ${[...prev, num].join(' → ')}`)
-      return [...prev, num]
+      const newList = [...prev, num]
+      addLog(`Appended ${num} → list is now ${newList.join(' → ')}`)
+      setTrace?.({ jsCode: APPEND_JS, pyCode: APPEND_PY, activeLine: 5, variables: { val: num, length: newList.length } })
+      return newList
     })
     setInputVal('')
   }
@@ -29,8 +40,10 @@ export default function LinkedList({ view }) {
     if (!val) return
     const num = parse(val)
     setList(prev => {
-      addLog(`Prepended ${num} → list is now ${[num, ...prev].join(' → ')}`)
-      return [num, ...prev]
+      const newList = [num, ...prev]
+      addLog(`Prepended ${num} → list is now ${newList.join(' → ')}`)
+      setTrace?.({ jsCode: PREPEND_JS, pyCode: PREPEND_PY, activeLine: 1, variables: { val: num, length: newList.length } })
+      return newList
     })
     setInputVal('')
   }
@@ -46,6 +59,7 @@ export default function LinkedList({ view }) {
       setList(prev => {
         const next = prev.filter((_, i) => i !== idx)
         addLog(`Deleted ${num} → list is now ${next.join(' → ') || 'empty'}`)
+        setTrace?.({ jsCode: DELETE_JS, pyCode: DELETE_PY, activeLine: 4, variables: { deleted: num, length: next.length } })
         return next
       })
       setDeletedIdx(null)
