@@ -60,7 +60,7 @@ export default function DsaPanel() {
         >Code</button>
       </div>
 
-      <div className="dsa-content" style={activeView === 'simulate' ? { display: 'flex', gap: 16, padding: 24 } : {}}>
+      <div className="dsa-content" style={activeView === 'simulate' ? { display: 'flex', flexDirection: 'row', gap: 24, padding: 24 } : {}}>
         <div style={{ flex: 1, minWidth: 0 }}>
           <ActiveComponent view={activeView} setTrace={activeView === 'simulate' ? setTrace : undefined} />
         </div>
