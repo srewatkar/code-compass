@@ -141,7 +141,7 @@ function RecursionVisual({ step }) {
         </svg>
       </div>
 
-      <div style={{ width: 130, flexShrink: 0 }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 11, color: '#64748b', marginBottom: 6, fontStyle: 'italic' }}>
           Call stack
         </div>
