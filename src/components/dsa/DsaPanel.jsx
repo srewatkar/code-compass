@@ -65,7 +65,7 @@ export default function DsaPanel() {
           <ActiveComponent view={activeView} setTrace={activeView === 'simulate' ? setTrace : undefined} />
         </div>
         {activeView === 'simulate' && trace.jsCode && (
-          <div style={{ width: 400, flexShrink: 0 }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
             <TracePanel
               jsCode={trace.jsCode}
               pyCode={trace.pyCode}

@@ -91,7 +91,7 @@ export default function PatternSimulator({ steps, renderStep, traceCode }) {
       <div style={{ flex: 1, minWidth: 0 }}>
         {simulator}
       </div>
-      <div style={{ width: 400, flexShrink: 0 }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
         <TracePanel
           jsCode={traceCode.js}
           pyCode={traceCode.python}
