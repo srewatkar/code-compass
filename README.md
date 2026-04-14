@@ -1,6 +1,8 @@
 # Code Compass
 
-A interactive reference tool for developers learning JavaScript and Python side-by-side, with visual data structure simulators and algorithmic pattern guides.
+**Live site:** https://srewatkar.github.io/code-compass/
+
+An interactive reference tool for developers learning JavaScript and Python side-by-side, with visual data structure simulators and algorithmic pattern guides.
 
 ## Sections
 
@@ -15,10 +17,10 @@ Interactive simulators for core data structures with step-through visualization 
 - **Binary Tree** — insert, search, inorder/preorder/postorder/level-order traversals
 - **Sorting** — Bubble, Selection, Insertion sort with bar chart step-through
 
-Each simulator has a **Simulate** tab (interactive) and a **Code** tab (JS + Python templates).
+Each simulator has a **Simulate** tab (interactive, with live code trace panel) and a **Code** tab (JS + Python templates).
 
-### Algo (in progress)
-17 common algorithmic patterns with step-through simulators and code templates:
+### Algo
+18 common algorithmic patterns with step-through simulators, code templates, and live code tracing:
 
 | Category | Patterns |
 |---|---|
@@ -26,13 +28,15 @@ Each simulator has a **Simulate** tab (interactive) and a **Code** tab (JS + Pyt
 | Trees & Graphs | BFS Template, DFS Template, Backtracking, Topological Sort |
 | Binary Search | Classic Binary Search, Binary Search on Answer |
 | Dynamic Programming | 1D Memoization, 1D Tabulation, 2D DP |
-| Other | Hash Map / Frequency, Merge Intervals, Heap / Priority Queue |
+| Other | Hash Map / Frequency, Merge Intervals, Heap / Priority Queue, Recursion |
+
+Each pattern's Simulate tab shows a split view: the step-through visual on the left, and the currently executing line highlighted in the JS or Python template on the right, with a live variable state panel.
 
 ## Tech Stack
 
 - **React 18** + Vite
 - **highlight.js** for syntax highlighting
-- **Vitest** + jsdom for tests (596 tests)
+- **Vitest** + jsdom for tests (690 tests)
 - No other runtime dependencies
 
 ## Running locally
